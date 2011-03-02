@@ -1,1860 +1,1093 @@
-dnl -*-Mode: autoconf;-*-
+dnl
+dnl  Externals configure.
+dnl
+dnl  Copyright (c) 2008-2011, Rice University.
+dnl  All rights reserved.
+dnl
+dnl  Redistribution and use in source and binary forms, with or without
+dnl  modification, are permitted provided that the following conditions are
+dnl  met:
+dnl
+dnl  * Redistributions of source code must retain the above copyright
+dnl    notice, this list of conditions and the following disclaimer.
+dnl
+dnl  * Redistributions in binary form must reproduce the above copyright
+dnl    notice, this list of conditions and the following disclaimer in the
+dnl    documentation and/or other materials provided with the distribution.
+dnl
+dnl  * Neither the name of Rice University (RICE) nor the names of its
+dnl    contributors may be used to endorse or promote products derived from
+dnl    this software without specific prior written permission.
+dnl
+dnl  This software is provided by RICE and contributors "as is" and any
+dnl  express or implied warranties, including, but not limited to, the
+dnl  implied warranties of merchantability and fitness for a particular
+dnl  purpose are disclaimed. In no event shall RICE or contributors be
+dnl  liable for any direct, indirect, incidental, special, exemplary, or
+dnl  consequential damages (including, but not limited to, procurement of
+dnl  substitute goods or services; loss of use, data, or profits; or
+dnl  business interruption) however caused and on any theory of liability,
+dnl  whether in contract, strict liability, or tort (including negligence
+dnl  or otherwise) arising in any way out of the use of this software, even
+dnl  if advised of the possibility of such damage.
+dnl
+dnl  $Id$
+dnl
 
-dnl * BeginRiceCopyright *****************************************************
-dnl
-dnl $HeadURL$
-dnl $Id$
-dnl
-dnl --------------------------------------------------------------------------
-dnl Part of HPCToolkit (hpctoolkit.org)
-dnl
-dnl Information about sources of support for research and development of
-dnl HPCToolkit is at 'hpctoolkit.org' and in 'README.Acknowledgments'.
-dnl --------------------------------------------------------------------------
-dnl
-dnl Copyright ((c)) 2002-2011, Rice University
-dnl All rights reserved.
-dnl
-dnl Redistribution and use in source and binary forms, with or without
-dnl modification, are permitted provided that the following conditions are
-dnl met:
-dnl
-dnl * Redistributions of source code must retain the above copyright
-dnl   notice, this list of conditions and the following disclaimer.
-dnl
-dnl * Redistributions in binary form must reproduce the above copyright
-dnl   notice, this list of conditions and the following disclaimer in the
-dnl   documentation and/or other materials provided with the distribution.
-dnl
-dnl * Neither the name of Rice University (RICE) nor the names of its
-dnl   contributors may be used to endorse or promote products derived from
-dnl   this software without specific prior written permission.
-dnl
-dnl This software is provided by RICE and contributors "as is" and any
-dnl express or implied warranties, including, but not limited to, the
-dnl implied warranties of merchantability and fitness for a particular
-dnl purpose are disclaimed. In no event shall RICE or contributors be
-dnl liable for any direct, indirect, incidental, special, exemplary, or
-dnl consequential damages (including, but not limited to, procurement of
-dnl substitute goods or services; loss of use, data, or profits; or
-dnl business interruption) however caused and on any theory of liability,
-dnl whether in contract, strict liability, or tort (including negligence
-dnl or otherwise) arising in any way out of the use of this software, even
-dnl if advised of the possibility of such damage.
-dnl
-dnl ******************************************************* EndRiceCopyright *
+AC_INIT([externals], [5.0.1], [hpctoolkit-forum@rice.edu],
+        [hpctoolkit-externals], [http://hpctoolkit.org/])
+AC_COPYRIGHT([Copyright (c) 2008-2011, Rice University.
+See the file LICENSE for details.])
 
-dnl ##########################################################################
-dnl
-dnl  File:
-dnl    $HeadURL$
-dnl
-dnl  Description:
-dnl    autoconf input file for HPCToolkit.
-dnl    *Process with autoconf to produce configure*
-dnl
-dnl  Modification history:
-dnl    2004/03/03 - Nathan Tallent
-dnl    ...
-dnl
-dnl  Organization:
-dnl  1. Autoconf dependencies (autoconf version/automake version)
-dnl  2. Special options that need to be checked before compiler tests
-dnl  3. Basic prerequisites (compiler tests, tools, system, etc.)
-dnl  4. Host-specific settings and tests 
-dnl  5. Process and test --with/--enable options (which may need the host-specific settings)
-dnl  6. Generate output
-dnl
-dnl ##########################################################################
-
-dnl--------------------------------------------------------------------------
-dnl Autoconf dictionary:
-dnl   build : platform on which the package is configured and
-dnl           compiled. Defaults to the result of running config.guess.
-dnl   host  : platform on which the package runs. Defaults to build.
-dnl   target: platform for which any compiler tools in the package
-dnl           produce code (rarely needed). Defaults to host.
-dnl--------------------------------------------------------------------------
-
-m4_include(config/hpc-cxxutils.m4)
-m4_include(config/hpc-mpiutils.m4)
-
-#----------------------------------------------------------------------------
-# Initialization: 
-#----------------------------------------------------------------------------
-
-AC_INIT([hpctoolkit], [5.0.1],
-        [hpctoolkit-forum@rice.edu],
-	[hpctoolkit],
-	[http://hpctoolkit.org/])
-AC_CONFIG_SRCDIR([src/include/hpctoolkit-config.h.in])
 AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_MACRO_DIR([config])
-
-AC_MSG_NOTICE([INFO: from user: CXX='${CXX}' CXXFLAGS='${CXXFLAGS}'])
-AC_MSG_NOTICE([INFO: from user: CC='${CC}' CFLAGS='${CFLAGS}'])
-AC_MSG_NOTICE([INFO: from user: MPICXX='${MPICXX}'])
-
-# NOTE: please update config/README.version
 AC_PREREQ(2.67)
-AM_INIT_AUTOMAKE(1.11.1)
-LT_PREREQ([2.2.10])
 
-AM_MAINTAINER_MODE()
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile.conf])
+AC_CONFIG_FILES([externs.conf])
+AC_CONFIG_FILES([options.conf])
 
-AC_CANONICAL_BUILD()
-AC_CANONICAL_HOST()
+AC_SUBST([CC])
+AC_SUBST([CFLAGS])
+AC_SUBST([CXX])
+AC_SUBST([CXXFLAGS])
+AC_SUBST([AR])
 
-MPICXX_ORIG=${MPICXX}
+AC_SUBST([build])
+AC_SUBST([build_cpu])
+AC_SUBST([build_os])
+AC_SUBST([host])
+AC_SUBST([host_cpu])
+AC_SUBST([host_os])
+AC_SUBST([is_cross_compile])
+AC_SUBST([prefix])
 
-#----------------------------------------------------------------------------
-# Setup
-#----------------------------------------------------------------------------
+AC_PROG_CC
+AC_PROG_CXX
 
-# ${srcdir}, ${ac_top_srcdir}, ${ac_top_builddir}
-hpctoolkit_top=`cd ${srcdir} && pwd`
-hpctoolkit_build=`pwd`
-HPCTOOLKIT_PLATFORM=`cd ${hpctoolkit_top}/config && ./hpcplatform`
-AC_SUBST([HPCTOOLKIT_PLATFORM])
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
 
-#-------------------------------------------------
-# SVN version
-#-------------------------------------------------
+failure_file=BUILD-FAILURE
+externs_file=externs.conf
+nobuild_cookie=.dont-build
+version_file="${srcdir}/.svn-revision"
 
-# Append svn revision to PACKAGE_VERSION.
-#
+#------------------------------------------------------------
+# Prefix
+#------------------------------------------------------------
+
+# Allow the user to set the prefix, but change the default to a subdir
+# of the build directory.  Autoconf requires this to be an absolute
+# path.  Normalize the path and mkdir the directory so we can write
+# externs.conf into it.
+
+if test "x$prefix" = xNONE ; then
+    prefix="`pwd`/${host}"
+fi
+if mkdir -p "$prefix" ; then : ; else
+    AC_MSG_ERROR([unable to mkdir $prefix])
+fi
+prefix=`( cd "$prefix" && pwd )`
+
+#------------------------------------------------------------
+# SVN revision
+#------------------------------------------------------------
+
 # If this directory is an svn sandbox, then use svn info (and store
 # the result in a file), else expect the answer to be in the file.
 # Note: svn update changes the revision number, so svn info must take
 # precedence over the file.
-#
-# *** N.B.: since PACKAGE_VERSION is also used in the 'dist' tarball,
-# it is better not to use spaces or special characters ***
-
-version_file="${srcdir}/.svn-revision"
 
 AC_MSG_CHECKING([for svn revision])
 
 svn_revision=`svn info $srcdir 2>/dev/null | grep -e '^Revision' | awk '{ print $2 }'`
-if test -n "${svn_revision}" ; then
-  PACKAGE_VERSION="${PACKAGE_VERSION}-r${svn_revision}"
-  rm -f "$version_file"
-  echo "$svn_revision" > "$version_file"
+if test "x$svn_revision" != x ; then
+    PACKAGE_VERSION="${PACKAGE_VERSION}-r${svn_revision}"
+    rm -f "$version_file"
+    echo "$svn_revision" > "$version_file"
 elif test -f "$version_file" ; then
-  svn_revision=`cat $version_file`
-  PACKAGE_VERSION="${PACKAGE_VERSION}-r${svn_revision}"
+    svn_revision=`cat $version_file`
+    PACKAGE_VERSION="${PACKAGE_VERSION}-r${svn_revision}"
 else
-  svn_revision=0
+    svn_revision=0
 fi
 
 AC_MSG_RESULT([$svn_revision])
 
 if test "$svn_revision" = 0 ; then
-  AC_MSG_WARN([unable to find svn revision])
+    AC_MSG_WARN([unable to find svn revision])
 fi
 
+AC_SUBST([svn_revision])
 
-AC_DEFINE_UNQUOTED([HPCTOOLKIT_VERSION],
-	  ["${PACKAGE_VERSION}"],
-	  [HPCToolkit version])
+#------------------------------------------------------------
+# Compiler issues
+#------------------------------------------------------------
 
-AC_DEFINE_UNQUOTED([HPCTOOLKIT_VERSION_STRING],
-	  ["A member of HPCToolkit, version ${PACKAGE_VERSION}"],
-	  [HPCToolkit version string])
-
-#-------------------------------------------------
 # is_cross_compile: non-empty string if cross-compiling
-#-------------------------------------------------
 
 is_cross_compile=""
-if test "${build}" != "${host}" ; then
-  is_cross_compile=${host}
+if test "x$build" != "x$host" ; then
+   is_cross_compile=${host}
 fi
 
+# Warn if not using GNU gcc and g++.  Some packages don't build
+# cleanly without gcc.  For example, binutils fails with icc.
+# It's a pain to robustly identify GNU gcc/g++: Intel icc defines
+# __GNUC__ and Ubuntu g++ --version doesn't display "GCC".
 
-#----------------------------------------------------------------------------
-# Special Options that should be tested first
-#----------------------------------------------------------------------------
-
-#-------------------------------------------------
-# HPC_LT_LDFLAGS, HPCPROFMPI_LT_LDFLAGS: pass libtool link mode flags
-#-------------------------------------------------
-
-AC_ARG_VAR([HPC_LT_LDFLAGS],
-           [pass libtool link mode flags to hpcstruct, hpcprof*, hpclump])
-
-AC_ARG_VAR([HPCPROFMPI_LT_LDFLAGS],
-           [pass libtool link mode flags to hpcprof-mpi (before HPC_LT_LDFLAGS)])
-
-
-#-------------------------------------------------
-# enable-develop
-#-------------------------------------------------
-
-AC_MSG_CHECKING([whether DEVELOP mode is enabled])
-
-OPT_ENABLE_DEVELOP=no
-
-AC_ARG_ENABLE([develop],
-  AS_HELP_STRING([--enable-develop],
-                 [Build development version (enable debugging)]),
-  [case "${enableval}" in
-     yes) OPT_ENABLE_DEVELOP="yes" ;;
-     no)  OPT_ENABLE_DEVELOP="no" ;;
-     *) AC_MSG_ERROR([bad value ${enableval} for --enable-develop]) ;;
-   esac],
-  [OPT_ENABLE_DEVELOP=no])
-
-AC_MSG_RESULT([${OPT_ENABLE_DEVELOP}])
-AM_CONDITIONAL(OPT_ENABLE_DEVELOP, test "${OPT_ENABLE_DEVELOP}" = "yes")
-
-
-#----------------------------------------------------------------------------
-# Prerequisites: compilers, tools, system libraries
-#----------------------------------------------------------------------------
-
-# AC_PROG_CXX will set CXXFLAGS to something like -g -O2 if not
-# already defined.  We do not want this!
-HPC_ENSURE_DEFINED_CXXFLAGS()
-HPC_ENSURE_DEFINED_CFLAGS()
-
-# Check for programs.
-# Note: libtool makes PROG_RANLIB obsolete
-
-AC_PROG_CXX(HPC_CXX_LIST)
-
-AC_PROG_CC(HPC_CC_LIST)
-AC_PROG_CC_C99()
-if test "${ac_cv_prog_cc_c99}" = "no" ; then
-  AC_MSG_ERROR([${CC} ${CFLAGS} does not support C99 mode!])
-fi
-AM_PROG_CC_C_O()
-
-# Note: this will set CC and CFLAGS if not already set
-LT_INIT()
-AC_SUBST([LIBTOOL_DEPS])
-
-AM_PROG_AS()
-
-AC_PROG_CXXCPP()
-
-HPC_PROG_MPICXX(HPC_MPICXX_LIST)
-
-AC_PROG_INSTALL()
-
-AC_MSG_NOTICE([INFO: post autoconf tests: CXX='${CXX}' CXXFLAGS='${CXXFLAGS}'])
-AC_MSG_NOTICE([INFO: post autoconf tests: CC='${CC}' CFLAGS='${CFLAGS}'])
-AC_MSG_NOTICE([INFO: post autoconf tests: MPICXX='${MPICXX}'])
-
-
-# Use C++ compiler for all checks
-AC_LANG([C++])
-
-# Check for header files
-AC_HEADER_STDC()
-AC_CHECK_HEADERS(unistd.h)
-AC_CHECK_HEADERS(inttypes.h)
-HPC_CHECK_CXX_STDC_HEADERS()
-
-# Check for types
-AC_CHECK_SIZEOF([void*])
-AC_CHECK_TYPES([ushort, uint, ulong])
-
-host_sizeof_voidp="${ac_cv_sizeof_voidp}"
-
-# Check pthread.h
-HPC_CHECK_COMPILE_PTHREAD_H()
-
-
-#-------------------------------------------------
-# Check for multilib
-#-------------------------------------------------
-
-# NOTE: can this be made more elegant?  This value should be used to
-# automatically add/exclude lib32/lib64 paths below.
-HAVE_OS_MULTILIB="no"
-LIB_SEARCH_PATH="lib"
-AC_MSG_CHECKING([for multilib platform])
-case "${host}" in
-  x86_64*-*-linux* | mips64*-*-linux* | powerpc64*-*-linux*)
-    HAVE_OS_MULTILIB="yes"
-    LIB_SEARCH_PATH="lib lib64 lib32"
-    ;;
-esac
-if test "${HAVE_OS_MULTILIB}" = "yes" ; then
-  AC_DEFINE([HAVE_OS_MULTILIB], [1], [HOST OS: 32 and 64 bit OS libraries])
-fi
-AC_MSG_RESULT([${HAVE_OS_MULTILIB} (searching: ${LIB_SEARCH_PATH})])
-
-# Check for typedefs, structures, and compiler characteristics.
-# -none thus far-
-
-# Check for library functions.
-# -none thus far-
-
-
-#----------------------------------------------------------------------------
-# Host-dependent configuration
-# $host: $host_cpu-$host_vendor-$host_os
-#----------------------------------------------------------------------------
-
-HPC_DEF_CXXCMP()
-
-#-------------------------------------------------
-# set unwinder variable
-#-------------------------------------------------
-
-UNWINDER=no
-
-#-------------------------------------------------
-# Host-specific defines
-#-------------------------------------------------
-
-# NOTE: To see what macros gcc-like compilers define:
-#   gcc -dM -E - < /dev/null | sort
-#
-# FIXME: This should probably be split into separate CPU and OS
-# sections.
-
-HOST_OS=
-HOST_CPU_MIPS=no
-HOST_CPU_PPC=no
-HOST_CPU_X86=no
-HOST_CPU_X86_64=no
-HOST_CPU_X86_FAMILY=no
-
-case "${host}" in
-  # Linux
-  i386*-*-linux* | i686*-*-linux*)
-    # __i386 && __linux
-    HOST_OS="Linux"
-    HOST_CPU_X86=yes
-    HOST_CPU_X86_FAMILY=yes
-    UNWINDER=x86-family
-    AC_DEFINE([HOST_CPU_x86], [1], [HOST CPU: x86 (32-bit)])
-    AC_DEFINE([HOST_OS_LINUX], [1], [HOST OS: Linux])
-    ;;
-
-  x86_64*-*-linux*)
-    # __x86_64 && __linux
-    HOST_OS="Linux"
-    if test "${host_sizeof_voidp}" = "4"; then
-      HOST_CPU_X86=yes
-      AC_DEFINE([HOST_CPU_x86], [1], [HOST CPU: x86 (32-bit)])
-    else
-      HOST_CPU_X86_64=yes
-      AC_DEFINE([HOST_CPU_x86_64], [1], [HOST CPU: x86-64])
-    fi
-    HOST_CPU_X86_FAMILY=yes
-    UNWINDER=x86-family
-    AC_DEFINE([HOST_OS_LINUX], [1], [HOST OS: Linux])
-    ;;
-
-  ia64*-*-linux*)
-    # __ia64 && __linux
-    HOST_OS="Linux"
-    AC_DEFINE([HOST_OS_LINUX], [1], [HOST OS: Linux])
-    ;;
-
-  mips64*-*-linux*)
-    # __mips64 && __linux / _MIPS_SIM == _ABIN32 / _MIPS_SIM == _ABI64
-    HOST_OS="Linux"
-    HOST_CPU_MIPS=yes
-    UNWINDER=mips
-    AC_DEFINE([HOST_PLATFORM_MIPS64LE_LINUX], [1], [HOST platform: MIPS64LE_LINUX])
-    AC_DEFINE([HOST_OS_LINUX], [1], [HOST OS: Linux])
-    ;;
-
-  powerpc64*-*-linux* | powerpc-*-linux*)
-    # []
-    HOST_OS="Linux"
-    HOST_CPU_PPC=yes
-    UNWINDER=ppc64
-    AC_DEFINE([HOST_OS_LINUX], [1], [HOST OS: Linux])
-    ;;
-
-  # MacOS
-  powerpc*-*-darwin*)
-    # __ppc__ / __MACH__
-    HOST_OS="MacOS"
-    HOST_CPU_PPC=yes
-    UNWINDER=ppc64
-    AC_DEFINE([HOST_OS_MACOS], [1], [HOST OS: MacOS])
-    ;;
-
-  i386*-*-darwin* | i686*-*-darwin*)
-    HOST_OS="MacOS"
-    HOST_CPU_X86=yes
-    UNWINDER=x86-family
-    AC_DEFINE([HOST_CPU_x86], [1], [HOST CPU: x86 (32-bit)])
-    AC_DEFINE([HOST_OS_MACOS], [1], [HOST OS: MacOS])
-    ;;
-
-  x86_64*-*-darwin*)
-    HOST_OS="MacOS"
-    if test "${host_sizeof_voidp}" = "4"; then
-      HOST_CPU_X86=yes
-      AC_DEFINE([HOST_CPU_x86], [1], [HOST CPU: x86 (32-bit)])
-    else
-      HOST_CPU_X86_64=yes
-      AC_DEFINE([HOST_CPU_x86_64], [1], [HOST CPU: x86-64])
-    fi
-    HOST_CPU_X86_FAMILY=yes
-    UNWINDER=x86-family
-    AC_DEFINE([HOST_OS_MACOS], [1], [HOST OS: MacOS])
-    ;;
-
-  # IRIX
-  mips*-*-irix*)
-    # __mips && __sgi && __unix
-    # _MIPS_ISA == _MIPS_ISA_MIPS1 | _MIPS_ISA == _MIPS_ISA_MIPS2
-    # _MIPS_ISA == _MIPS_ISA_MIPS3 | _MIPS_ISA == _MIPS_ISA_MIPS4
-    HOST_OS="IRIX"
-    HOST_CPU_MIPS=yes
-    UNWINDER=mips
-    AC_DEFINE([HOST_OS_IRIX], [1], [HOST OS: IRIX])
-    ;;
-
-  # Solaris
-  sparc*-*-solaris*)
-    # __sparc && __sun && __unix
-    HOST_OS="Solaris"
-    AC_DEFINE([HOST_OS_SOLARIS], [1], [HOST OS: Solaris])
-    ;;
-
-  # Tru64/OSF
-  alpha*-*-osf*)
-    # __alpha / __digital__ && __unix__
-    HOST_OS="Tru64"
-    AC_DEFINE([HOST_OS_TRU64], [1], [HOST OS: Tru64])
-    ;;
-
-  *)
-    AC_MSG_ERROR([HPCToolkit is not configured for HOST=${host}!])
-    ;;
-esac
-
-
-AM_CONDITIONAL([HOST_OS_LINUX],   [test "${HOST_OS}" = Linux])
-AM_CONDITIONAL([HOST_CPU_MIPS],   [test "${HOST_CPU_MIPS}" = yes])
-AM_CONDITIONAL([HOST_CPU_PPC],    [test "${HOST_CPU_PPC}" = yes])
-AM_CONDITIONAL([HOST_CPU_X86],    [test "${HOST_CPU_X86}" = yes])
-AM_CONDITIONAL([HOST_CPU_X86_64], [test "${HOST_CPU_X86_64}" = yes])
-AM_CONDITIONAL([HOST_CPU_X86_FAMILY], [test "${HOST_CPU_X86_FAMILY}" = yes])
-
-#
-# set up automake choice of unwinder
-#
-
-AM_CONDITIONAL([UNW_X86], [test "$UNWINDER" = x86-family])
-AM_CONDITIONAL([UNW_PPC64], [test "$UNWINDER" = ppc64])
-AM_CONDITIONAL([UNW_MIPS], [test "$UNWINDER" = mips])
-
-#-------------------------------------------------
-# Host-specific compiler settings
-#-------------------------------------------------
-
-# FIXME: Now that we use libtool to build all HPCToolkit libraries, we
-# may not need this HOST_AR stuff.  (Remove from here and makefiles.)
-
-# General settings for internal libraries
-HOST_CFLAGS=""
-HOST_CXXFLAGS=""
-HOST_AR=""
-HOST_LIBTREPOSITORY=""
-HOST_LINK_NO_START_FILES="-nostartfiles"
-
-# Specific settings for programs
-HOST_HPCRUN_LDFLAGS=""
-HOST_HPCSTRUCT_LDFLAGS="-lm"
-HOST_HPCPROF_LDFLAGS="-lm"
-HOST_HPCPROF_FLAT_LDFLAGS="-lm"
-HOST_HPCPROFTT_LDFLAGS="-lm"
-HOST_XPROF_LDFLAGS=""
-my_demangle_ldflags=""
-
-# Options: Default for GCC
-if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-  my_opt_cflags="-g -O0 -Wall"
-  my_opt_cxxflags="-g -O0 -Wall"
-else 
-  # On some compilers, -g implies -O0.  Make sure -O3 takes precedence!
-  my_opt_cflags="-g -O3 -Wall"
-  my_opt_cxxflags="-g -O3 -Wall"
+warn_non_gcc=no
+$CC --version 2>&1 | grep -i 'free software found' >/dev/null 2>&1
+if test $? -ne 0 ; then
+    warn_non_gcc=yes
+    AC_MSG_WARN([Not using the GNU C compiler.])
 fi
 
+$CXX --version 2>&1 | grep -i 'free software found' >/dev/null 2>&1
+if test $? -ne 0 ; then
+    warn_non_gcc=yes
+    AC_MSG_WARN([Not using the GNU C++ compiler.])
+fi
 
-case "${host}" in
+# Test if CXX supports <tr1/unordered_map>.  SymtabAPI uses this with
+# gcc 4.3 and later, but some installations (biou) are missing this.
 
-  # Linux x86
-  i386*-*-linux* | i686*-*-linux* | x86_64*-*-linux*)
-    # GCC
-    if HPCcxxcmp([g++ c++]) ; then
-      if test "${host_sizeof_voidp}" = "4"; then
-        HOST_CXXFLAGS="-march=i486"
-      fi
-    fi
-    if HPCcccmp([gcc cc]) ; then
-      if test "${host_sizeof_voidp}" = "4"; then
-        HOST_CFLAGS="-march=i486"
-      fi
-    fi
+AC_MSG_CHECKING([if CXX supports tr1 unordered_map])
 
-    # Intel compiler
-    if HPCcxxcmp([icpc ecpc]) ; then
-      :
-    fi
-    if HPCcccmp([icc ecc]) ; then
-      :
-    fi
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([
+#include <functional>
+#include <tr1/unordered_map>
+#include <tr1/unordered_set>
+], [ans=yes], [ans=no])
+AC_LANG_POP
 
-    # Pathscale compiler
-    if HPCcxxcmp([pathCC]) ; then
-      :
-    fi
-    if HPCcccmp([pathcc]) ; then
-      :
-    fi
+AC_MSG_RESULT([$ans])
 
-    # PGI compiler
-    if HPCcxxcmp([pgCC]) ; then
-      if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-        my_opt_cxxflags="-g -O0"
-      else
-        my_opt_cxxflags="-gopt -O2"
-      fi
-    fi
-    if HPCcccmp([pgcc]) ; then
-      if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-        my_opt_cflags="-g -O0 -c9x"
-      else
-        my_opt_cflags="-gopt -O3 -c9x"
-      fi
-    fi
-    ;;
+have_tr1_map="$ans"
+AC_SUBST([have_tr1_map])
 
-  # Linux ia64
-  ia64*-*-linux*)
-    ;;
+#------------------------------------------------------------
+# GNU make
+#------------------------------------------------------------
 
-  # Linux mips
-  mips64*-*-linux*)
-    ;;
+# Try to find GNU make.  Amazingly, AC doesn't have a macro for this.
+# We only use this value when running configure scripts directly.
+# When starting from a make target, MAKE is exported to the scripts.
+# Thus, it's not fatal if we can't find gnu make here, as long as you
+# later run a gnu-compatible make.
 
-  # Linux power
-  powerpc64*-*-linux*)
-    # IBM compiler
-    ;;
+AC_MSG_CHECKING([for gnu make])
 
-  # IRIX
-  mips*-*-irix*)
-    # SGI MIPSpro
-    if HPCcxxcmp([CC]) ; then
-      HOST_CXXFLAGS="-64 -LANG:std"
-      HOST_AR="$CXX $CXXFLAGS ${HOST_CXXFLAGS} -ar -o"
-    fi
-    if HPCcccmp([cc]) ; then
-      HOST_CFLAGS="-64"
-    fi
-    
-    # GCC
-    if HPCcxxcmp([g++ c++]) ; then
-      HOST_CXXFLAGS="-mabi=64"
-    fi
-    if HPCcccmp([gcc]) ; then
-      HOST_CFLAGS="-mabi=64"
-    fi
-   
-    # SGI demangle
-    my_demangle_ldflags="-lmangle"
-    ;;
-
-  # Solaris
-  sparc*-*-solaris*)
-    # Sun Forte/ONE
-    if HPCcxxcmp([CC]); then
-      if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-        my_opt_cxxflags="-g"
-      else 
-        my_opt_cxxflags="-fast -g"
-      fi
-      HOST_AR="$CXX $CXXFLAGS -xar -o"
-    fi
-    if HPCcccmp([cc]); then
-      if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-        my_opt_cflags="-g"
-      else 
-        my_opt_cflags="-fast -g"
-      fi
-    fi
-    
-    # Sun demangle
-    my_demangle_ldflags="-ldemangle"
-    ;;
-
-  # Tru64/OSF
-  alpha*-*-osf*)
-    # Compaq compiler
-    if HPCcxxcmp([cxx]); then
-      # Before using libtool, we had used local
-      # repositories and included template definitions in respective
-      # archives.  However, libtool doesn't take kindly to including
-      # .o's and .lo's in the same archive.  Thus, we now use a global
-      # repository, even though it means archives are not self-contained.
-      HOST_CXXFLAGS="-std strict_ansi -rtti -pt -ptr ${hpctoolkit_build}/cxx_trepository"
-      #old: HOST_LIBTREPOSITORY="./cxx_trepository/*.o"
-      if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-        my_opt_cxxflags="-gall"
-      else 
-        my_opt_cxxflags="-g3 -O2"
-      fi
-    fi
-    if HPCcccmp([cc]); then
-      if test "$OPT_ENABLE_DEVELOP" = "yes" ; then
-        my_opt_cflags="-g"
-      else 
-        my_opt_cflags="-g3 -O3"
-      fi
-    fi
-
-    # DEC demangle
-    my_demangle_ldflags="-lmld"
-    ;;
-
-  *)
-    ;;
-esac
-
-# Grab optimization flags
-HOST_CFLAGS="${HOST_CFLAGS} ${my_opt_cflags}"
-HOST_CXXFLAGS="${HOST_CXXFLAGS} ${my_opt_cxxflags}"
-
-# Several programs need system's demangle option
-HOST_HPCSTRUCT_LDFLAGS="${HOST_HPCSTRUCT_LDFLAGS} ${my_demangle_ldflags}"
-HOST_HPCPROF_LDFLAGS="${HOST_HPCPROF_LDFLAGS} ${my_demangle_ldflags}"
-HOST_XPROF_LDFLAGS="${HOST_XPROF_LDFLAGS} ${my_demangle_ldflags}"
-
-
-#-------------------------------------------------
-# Distribute these settings into makefiles
-#-------------------------------------------------
-
-AC_SUBST([HOST_CFLAGS])
-AC_SUBST([HOST_CXXFLAGS])
-AC_SUBST([HOST_AR])
-AC_SUBST([HOST_LIBTREPOSITORY])
-AC_SUBST([HOST_LINK_NO_START_FILES])
-AM_CONDITIONAL(IS_HOST_AR, test "${HOST_AR}" != "")
-
-AC_SUBST([HOST_HPCRUN_LDFLAGS])
-AC_SUBST([HOST_HPCSTRUCT_LDFLAGS])
-AC_SUBST([HOST_HPCPROF_LDFLAGS])
-AC_SUBST([HOST_HPCPROF_FLAT_LDFLAGS])
-AC_SUBST([HOST_HPCPROFTT_LDFLAGS])
-AC_SUBST([HOST_XPROF_LDFLAGS])
-
-AC_MSG_NOTICE([INFO: post hpc tests: CXX='${CXX}' CXXFLAGS='${CXXFLAGS}' HOST_CXXFLAGS='${HOST_CXXFLAGS}'])
-AC_MSG_NOTICE([INFO: post hpc tests: CC='${CC}' CFLAGS='${CFLAGS}' HOST_CFLAGS='${HOST_CFLAGS}'])
-AC_MSG_NOTICE([INFO: post hpc tests: MPICXX='${MPICXX}'])
-
-#----------------------------------------------------------------------------
-# Prerequisites: external libraries
-#----------------------------------------------------------------------------
-
-#
-# Directory relative to hpctoolkit's prefix where we put external
-# package libraries, if we want to copy them.
-#
-hpc_ext_libs_dir=lib/hpctoolkit/ext-libs
-AC_SUBST([hpc_ext_libs_dir])
-
-
-#-------------------------------------------------
-# Option: --with-externals=PATH
-#
-# If specified, then use PATH as the root of the external prereqs tree
-# and the file PATH/externs.conf for the locations of binutils, open
-# analysis, xerces, etc.  May be absolute or relative path.
-#
-# Note: using externals is not strictly necessary, but if not used,
-# then you'll need to build all of hpctoolkit's prereqs manually and
-# pass them all to configure.
-#-------------------------------------------------
-
-# External's minimum svn rev number, or else a fatal error.
-EXTERNALS_MIN_REV=2880
-
-AC_ARG_WITH([dummy-blank-line], [AS_HELP_STRING([], [])])
-AC_ARG_WITH([externals],
-  [AS_HELP_STRING([--with-externals=PATH],
-	  [path to external prereqs tree])],
-  [],
-  [with_externals=no])
-
-if test "${with_externals}" != "no"; then
-  ext_file="${with_externals}/externs.conf"
-  if test ! -f "$ext_file" ; then
-    AC_MSG_ERROR([missing externals file: $ext_file])
-  fi
-  AC_MSG_NOTICE([using externals tree: $with_externals])
-  externals_root=`( cd "$with_externals" && pwd )`
-  . "$ext_file"
-  AC_MSG_NOTICE([externals svn revision: $ext_version])
-  if test "$ext_version" -eq 0 ; then
-    AC_MSG_WARN([missing externals svn revision number])
-    ext_warning=' (warning: missing externals svn revision)'
-  elif test "$ext_version" -lt "$EXTERNALS_MIN_REV" ; then
-    AC_MSG_ERROR([externals tree too old, update to revision $EXTERNALS_MIN_REV or later])
-  fi
-  use_externals=yes
-  externals_mesg="${ext_version}${ext_warning}"
+if gmake --version 2>&1 | grep -i gnu >/dev/null 2>&1 ; then
+    gnu_make=gmake
+elif make --version 2>&1 | grep -i gnu >/dev/null 2>&1 ; then
+    gnu_make=make
 else
-  AC_MSG_WARN([not using --with-externals])
-  use_externals=no
-  externals_mesg=no
+    gnu_make=no
 fi
 
+AC_MSG_RESULT([$gnu_make])
 
-#-------------------------------------------------
-# Check for GNU's binutils (binary interface)
-#-------------------------------------------------
-# cf. enable-hpc-binutils
-
-AC_MSG_CHECKING([for GNU binutils])
-
-GNUBINUTILS=no
-if test "$use_externals" = yes ; then
-  GNUBINUTILS="$ext_binutils_prefix"
+if test "$gnu_make" = no ; then
+    AC_MSG_WARN([unable to find gnu make])
+    gnu_make=make
 fi
 
-AC_ARG_WITH([binutils],
-  AS_HELP_STRING([--with-binutils=PATH],
-                 [use given GNU binutils installation]),
-  [if test $withval != no; then
-     GNUBINUTILS=${withval}
-   fi],
-  [])
+AC_SUBST([gnu_make])
 
-# Note: With binutils 2.20.1, libiberty may be installed in a
-# different lib than libbfd and libopcodes (e.g., lib64 vs. lib).
-#
-# Note: With prior versions of binutils and libtool, we had to supply
-# an absolute path for libiberty.  Will this suffice?
-GNUBINUTILS_IFLAGS="-I${GNUBINUTILS}/include"
+#------------------------------------------------------------
+# Wordsize: --enable-wordsize=NUM
+#------------------------------------------------------------
 
-GNUBINUTILS_LDFLAGS="-L${GNUBINUTILS}/lib"
-if test "${host_sizeof_voidp}" = "8"; then
-  # -lbfd -lopcodes are in lib; -liberty is in lib64
-  GNUBINUTILS_LDFLAGS="${GNUBINUTILS_LDFLAGS} -L${GNUBINUTILS}/lib64"
-fi
+# Use sizeof(void *) to determine if CC produces 32- or 64-bit code.
+# This option is rarely needed, it exists just in case AC computes the
+# wrong value.
 
-GNUBINUTILS_LDLIBS="-lbfd -lopcodes -liberty"
+AC_CHECK_SIZEOF([void *])
 
-# on non-Linux systems we build libintl
-if test "${HOST_OS}" != "Linux"; then
-  GNUBINUTILS_LDLIBS="${GNUBINUTILS_LDLIBS} ${GNUBINUTILS}/lib/libintl.a"
-fi
+default=`expr $ac_cv_sizeof_void_p '*' 8`
 
+AC_ARG_ENABLE([wordsize],
+    [AS_HELP_STRING([--enable-wordsize=NUM],
+	[host wordsize in bits, 32 or 64, only needed if autoconf
+	 computes the wrong value])],
+    [wordsize="$enable_wordsize"],
+    [wordsize="$default"])
 
-AC_MSG_RESULT([${GNUBINUTILS}])
-AC_SUBST([GNUBINUTILS_IFLAGS])
-AC_SUBST([GNUBINUTILS_LDFLAGS])
-AC_SUBST([GNUBINUTILS_LDLIBS])
+AC_MSG_CHECKING([host wordsize])
+AC_MSG_RESULT([$wordsize bits])
 
+# The host wordsize also sets the multilib search path.  This only
+# applies to outside packages via --with-pkg (ie, not built here).
 
-#-------------------------------------------------
-# Option: --with-libdwarf=PATH
-#-------------------------------------------------
-
-LIBDWARF=no
-if test "$use_externals" = yes ; then
-    LIBDWARF="$ext_libdwarf_prefix"
-fi
-
-AC_ARG_WITH([libdwarf],
-  [AS_HELP_STRING([--with-libdwarf=PATH],
-  	    [path to libdwarf install directory])],
-  [LIBDWARF="$withval"],
-  [])
-
-AC_MSG_CHECKING([for libdwarf])
-
-case "${LIBDWARF}" in
-  /* )
-    if test -f "${LIBDWARF}/include/libdwarf.h" ; then :
-    else
-        AC_MSG_ERROR([invalid libdwarf directory: $LIBDWARF])
-    fi
-    LIBDWARF_COPY=yes
-    ;;
-  no )
-    LIBDWARF_COPY=no
-    ;;
-  * )
-    AC_MSG_ERROR([libdwarf directory must be absolute path: $LIBDWARF])
-    ;;
+case "$wordsize" in
+    64 ) multilib_path='lib64 lib' ;;
+    32 ) multilib_path='lib32 lib' ;;
+    * ) AC_MSG_ERROR([wordsize must be 32 or 64: $wordsize bits]) ;;
 esac
 
-LIBDWARF_LIB="${LIBDWARF}/lib"
+AC_SUBST([wordsize])
 
-AC_MSG_RESULT([$LIBDWARF])
+# Check that CC and CXX produce the same wordsize.  Also check that
+# CFLAGS doesn't change the wordsize.  This shouldn't be necessary,
+# but some packages can't handle -m64 in CFLAGS, they require
+# something like CC='gcc -m64'.
 
-AC_SUBST([LIBDWARF_LIB])
-AC_SUBST([LIBDWARF_COPY])
+srcfile="conftest.$$.c"
+objfile="conftest.$$.o"
 
+rm -f "$srcfile"
+cat >"$srcfile" <<EOF
+int foo(void)
+{ return 2; }
+EOF
 
-#-------------------------------------------------
-# Option: --with-libelf=PATH
-#-------------------------------------------------
-
-LIBELF=no
-if test "$use_externals" = yes ; then
-  LIBELF="$ext_libelf_prefix"
-fi
-
-AC_ARG_WITH([libelf],
-  [AS_HELP_STRING([--with-libelf=PATH],
-  	    [path to libelf install directory])],
-  [LIBELF="$withval"],
-  [])
-
-AC_MSG_CHECKING([for libelf])
-
-valid_libelf_dir()
+get_wordsize()
 {
-    test -f "$1/include/libelf.h" || test -f "$1/include/libelf/libelf.h"
+    output=`file $objfile`
+    case "$output" in
+	*64-bit* ) ans=64 ;;
+	*32-bit* ) ans=32 ;;
+	* ) ans=0 ;;
+    esac
+    echo $ans
 }
 
-case "${LIBELF}" in
-  /* )
-    if valid_libelf_dir "$LIBELF" ; then :
-    else
-        AC_MSG_ERROR([invalid libelf directory: $LIBELF])
+AC_MSG_CHECKING([host wordsize from CC])
+rm -f "$objfile"
+$CC -c -o "$objfile" "$srcfile" >/dev/null
+wordsize_cc=`get_wordsize`
+AC_MSG_RESULT([$wordsize_cc bits])
+
+AC_MSG_CHECKING([host wordsize from CXX])
+rm -f "$objfile"
+$CXX -c -o "$objfile" "$srcfile" >/dev/null
+wordsize_cxx=`get_wordsize`
+AC_MSG_RESULT([$wordsize_cxx bits])
+
+rm -f "$objfile"
+$CC $CFLAGS -c -o "$objfile" "$srcfile" >/dev/null
+wordsize_cflags=`get_wordsize`
+
+rm -f "$objfile"
+$CXX $CXXFLAGS -c -o "$objfile" "$srcfile" >/dev/null
+wordsize_cxxflags=`get_wordsize`
+
+rm -f "$srcfile" "$objfile"
+
+warn_wordsize_mismatch=no
+if test "$wordsize" != "$wordsize_cc" \
+    || test "$wordsize" != "$wordsize_cxx" \
+    || test "$wordsize" != "$wordsize_cflags" \
+    || test "$wordsize" != "$wordsize_cxxflags"
+then
+    AC_MSG_WARN([CC or CXX generate inconsistent wordsizes])
+    warn_wordsize_mismatch=yes
+fi
+
+#------------------------------------------------------------
+# Install directory: --enable-subdirs
+#------------------------------------------------------------
+
+# Install packages into: (1) a single, unified directory with shared
+# bin, include, lib dirs, or (2) separate subidrs, one for each
+# package.  Old monitor always uses a separate subdir due to name
+# conflicts.
+
+AC_ARG_ENABLE([subdirs],
+    [AS_HELP_STRING([--enable-subdirs],
+	[install packages into separate subdirs (default yes)])],
+    [],
+    [enable_subdirs=yes])
+
+AC_MSG_CHECKING([install directory])
+
+if test "x$enable_subdirs" = xyes ; then
+    binutils_local_prefix="${prefix}/binutils"
+    libdwarf_local_prefix="${prefix}/libdwarf"
+    libelf_local_prefix="${prefix}/libelf"
+    libmonitor_local_prefix="${prefix}/libmonitor"
+    libunwind_local_prefix="${prefix}/libunwind"
+    libxml2_local_prefix="${prefix}/libxml2"
+    old_monitor_local_prefix="${prefix}/old-monitor"
+    open_analysis_local_prefix="${prefix}/open-analysis"
+    symtabAPI_local_prefix="${prefix}/symtabAPI"
+    xed2_local_prefix="${prefix}/xed2"
+    xerces_local_prefix="${prefix}/xerces"
+    enable_subdirs_mesg=separate
+else
+    binutils_local_prefix="$prefix"
+    libdwarf_local_prefix="$prefix"
+    libelf_local_prefix="$prefix"
+    libmonitor_local_prefix="$prefix"
+    libunwind_local_prefix="$prefix"
+    libxml2_local_prefix="$prefix"
+    old_monitor_local_prefix="${prefix}/old-monitor"
+    open_analysis_local_prefix="$prefix"
+    symtabAPI_local_prefix="$prefix"
+    xed2_local_prefix="$prefix"
+    xerces_local_prefix="$prefix"
+    enable_subdirs_mesg=shared
+fi
+
+AC_MSG_RESULT([$enable_subdirs_mesg])
+
+#------------------------------------------------------------
+# Copy skeleton directories
+#------------------------------------------------------------
+
+# Support a separate build directory by copying the package skeleton
+# directories.  Just copy regular files and the patches subdir, don't
+# copy other subdirs.
+
+packages='binutils libdwarf libelf libmonitor libunwind libxml2
+old-monitor open-analysis symtabAPI xed2 xerces'
+
+if test "x$srcdir" != x.
+then
+    AC_MSG_CHECKING([copying package directories])
+    for pkg in $packages build-utils
+    do
+        if mkdir -p "$pkg" ; then : ; else
+	    AC_MSG_ERROR([unable to mkdir $pkg])
+	fi
+	for file in "${srcdir}/${pkg}"/*
+	do
+	    if test -f "$file" ; then
+		if cp -f "$file" "$pkg" ; then : ; else
+		    AC_MSG_ERROR([unable to copy $file])
+		fi
+	    fi
+	done
+	for dir in "${srcdir}/${pkg}"/patch*
+	do
+	    if test -d "$dir" ; then
+		base=`basename "$dir"`
+		if mkdir -p "${pkg}/${base}" ; then : ; else
+		    AC_MSG_ERROR([unable to mkdir $pkg/$base])
+		fi
+		for patch in "$dir"/patch-*
+		do
+		    if test -f "$patch" ; then
+			if cp -f "$patch" "${pkg}/${base}" ; then : ; else
+			    AC_MSG_ERROR([unable to copy $patch])
+			fi
+		    fi
+		done
+	    fi
+	done
+    done
+
+    # Symlink the distfiles directory.
+    if test ! -d distfiles ; then
+	if ln -s "${srcdir}/distfiles" distfiles ; then : ; else
+	    AC_MSG_ERROR([unable to symlink distfiles])
+	fi
     fi
-    LIBELF_COPY=yes
-    ;;
-  no )
-    LIBELF_COPY=no
-    ;;
-  * )
-    AC_MSG_ERROR([libelf directory must be absolute path: $LIBELF])
-    ;;
+
+    AC_MSG_RESULT([done])
+fi
+
+#------------------------------------------------------------
+# Binutils: --with-binutils=PATH
+#------------------------------------------------------------
+
+AC_ARG_WITH([dummy-blank-line], [AS_HELP_STRING([ ], [ ])])
+AC_ARG_WITH([binutils],
+    [AS_HELP_STRING([--with-binutils=PATH],
+	[path to binutils install directory (default build)])],
+    [],
+    [with_binutils=build])
+
+AC_MSG_CHECKING([binutils])
+
+binutils_avail=no
+binutils_prefix=no
+cookie="binutils/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_binutils" in
+    build | yes )
+	binutils_avail=build
+	binutils_prefix="$binutils_local_prefix"
+	;;
+    /* )
+	if test -f "${with_binutils}/include/bfd.h" ; then
+	    binutils_avail="$with_binutils"
+	    binutils_prefix="$with_binutils"
+	else
+	    AC_MSG_ERROR([invalid binutils directory: $with_binutils])
+	fi
+	echo "installed in: $with_binutils" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([binutils directory must be absolute path: $with_binutils])
+	;;
 esac
 
-LIBELF_LIB="${LIBELF}/lib"
-
-AC_MSG_RESULT([$LIBELF])
-
-AC_SUBST([LIBELF_LIB])
-AC_SUBST([LIBELF_COPY])
-
-
-#-------------------------------------------------
-# Option: --with-libmonitor=PATH
-#-------------------------------------------------
-
-LIBMONITOR=no
-OPT_LIBMONITOR_DYNAMIC=no
-OPT_LIBMONITOR_STATIC=no
-if test "$use_externals" = yes ; then
-  LIBMONITOR="$ext_libmonitor_prefix"
+AC_MSG_RESULT([$binutils_avail])
+if test "x$binutils_avail" != xbuild && test "x$binutils_avail" != xno ; then
+    AC_MSG_WARN([using non-patched binutils version])
 fi
+
+AC_SUBST([binutils_prefix])
+
+#------------------------------------------------------------
+# Libdwarf: --with-libdwarf=PATH
+#------------------------------------------------------------
+
+AC_ARG_WITH([libdwarf],
+    [AS_HELP_STRING([--with-libdwarf=PATH],
+	[path to libdwarf install directory (default build)])],
+    [],
+    [with_libdwarf=build])
+
+AC_MSG_CHECKING([libdwarf])
+
+libdwarf_avail=no
+libdwarf_prefix=no
+libdwarf_inc=no
+libdwarf_lib=no
+cookie="libdwarf/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_libdwarf" in
+    build | yes )
+	libdwarf_avail=build
+	libdwarf_prefix="$libdwarf_local_prefix"
+	libdwarf_inc="${libdwarf_prefix}/include"
+	libdwarf_lib="${libdwarf_prefix}/lib"
+	;;
+    /* )
+	libdwarf_avail="$with_libdwarf"
+	libdwarf_prefix="$with_libdwarf"
+	if test -f "${libdwarf_prefix}/include/libdwarf.h" ; then
+	    libdwarf_inc="${libdwarf_prefix}/include"
+	else
+	    AC_MSG_ERROR([invalid libdwarf directory: $with_libdwarf])
+	fi
+	for lib in $multilib_path fail ; do
+	    if test -f "${libdwarf_prefix}/${lib}/libdwarf.so" ; then
+		libdwarf_lib="${libdwarf_prefix}/${lib}"
+		break
+	    fi
+	    if test "$lib" = fail ; then
+		AC_MSG_ERROR([invalid libdwarf directory: $with_libdwarf])
+	    fi
+	done
+	echo "installed in: $libdwarf_avail" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([libdwarf directory must be absolute path: $with_libdwarf])
+	;;
+esac
+
+AC_MSG_RESULT([$libdwarf_avail])
+
+AC_SUBST([libdwarf_prefix])
+AC_SUBST([libdwarf_inc])
+AC_SUBST([libdwarf_lib])
+
+#------------------------------------------------------------
+# Libelf: --with-libelf=PATH
+#------------------------------------------------------------
+
+# FIXME: libelf installs and includes its header files as
+# <libelf/libelf.h> and not <libelf.h>.  It's a mess to support both
+# (libdwarf handles this, but symtabAPI does not), so we follow
+# libelf's usage.
+
+AC_ARG_WITH([libelf],
+    [AS_HELP_STRING([--with-libelf=PATH],
+	[path to libelf install directory (default build)])],
+    [],
+    [with_libelf=build])
+
+AC_MSG_CHECKING([libelf])
+
+libelf_avail=no
+libelf_prefix=no
+libelf_inc=no
+libelf_lib=no
+cookie="libelf/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_libelf" in
+    build | yes )
+	libelf_avail=build
+	libelf_prefix="$libelf_local_prefix"
+	libelf_inc="${libelf_prefix}/include"
+	libelf_lib="${libelf_prefix}/lib"
+	;;
+    /* )
+	libelf_avail="$with_libelf"
+	libelf_prefix="$with_libelf"
+	if test -f "${libelf_prefix}/include/libelf/libelf.h" ; then
+	    libelf_inc="${libelf_prefix}/include"
+	else
+	    AC_MSG_ERROR([unable to find <libelf/libelf.h> in: $libelf_prefix])
+	fi
+	for lib in $multilib_path fail ; do
+	    if test -f "${libelf_prefix}/${lib}/libelf.so" ; then
+		libelf_lib="${libelf_prefix}/${lib}"
+		break
+	    fi
+	    if test "$lib" = fail ; then
+		AC_MSG_ERROR([invalid libelf directory: $libelf_prefix])
+	    fi
+	done
+	echo "installed in: $libelf_avail" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([libelf directory must be absolute path: $with_libelf])
+	;;
+esac
+
+AC_MSG_RESULT([$libelf_avail])
+
+AC_SUBST([libelf_prefix])
+AC_SUBST([libelf_inc])
+AC_SUBST([libelf_lib])
+
+#------------------------------------------------------------
+# Libmonitor: --with-libmonitor=PATH
+#------------------------------------------------------------
 
 AC_ARG_WITH([libmonitor],
-  [AS_HELP_STRING([--with-libmonitor=PATH],
-  	    [path to libmonitor install directory])],
-  [LIBMONITOR="$withval"],
-  [])
+    [AS_HELP_STRING([--with-libmonitor=PATH],
+	[path to libmonitor install directory (default build)])],
+    [],
+    [with_libmonitor=build])
 
-AC_MSG_CHECKING([for libmonitor])
+AC_MSG_CHECKING([libmonitor])
 
-case "${LIBMONITOR}" in
-  /* )
-    LIBMONITOR_INC="${LIBMONITOR}/include"
-    if test -f "${LIBMONITOR_INC}/monitor.h" ; then :
-    else
-        AC_MSG_ERROR([invalid libmonitor directory: $LIBMONITOR])
-    fi
-    LIBMONITOR_LIB="${LIBMONITOR}/lib"
-    if test -f "${LIBMONITOR_LIB}/libmonitor.so" ; then
-        OPT_LIBMONITOR_DYNAMIC=yes
-    fi
-    if test -f "${LIBMONITOR_LIB}/libmonitor_wrap.a" ; then
-        OPT_LIBMONITOR_STATIC=yes
-    fi
-    LIBMONITOR_COPY=yes
-    LIBMONITOR_RUN_DIR="$hpc_ext_libs_dir"
-    ;;
-  no )
-    LIBMONITOR_COPY=no
-    LIBMONITOR_RUN_DIR=no
-    ;;
-  * )
-    AC_MSG_ERROR([libmonitor directory must be absolute path: $LIBMONITOR])
-    ;;
+libmonitor_avail=no
+libmonitor_prefix=no
+cookie="libmonitor/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_libmonitor" in
+    build | yes )
+	libmonitor_avail=build
+	libmonitor_prefix="$libmonitor_local_prefix"
+	;;
+    /* )
+	if test -f "${with_libmonitor}/include/monitor.h" ; then
+	    libmonitor_avail="$with_libmonitor"
+	    libmonitor_prefix="$with_libmonitor"
+	else
+	    AC_MSG_ERROR([invalid libmonitor directory: $with_libmonitor])
+	fi
+	echo "installed in: $with_libmonitor" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([libmonitor directory must be absolute path: $with_libmonitor])
+	;;
 esac
 
-AC_MSG_RESULT([$LIBMONITOR])
+AC_MSG_RESULT([$libmonitor_avail])
 
-AC_SUBST([LIBMONITOR_INC])
-AC_SUBST([LIBMONITOR_LIB])
-AC_SUBST([LIBMONITOR_COPY])
-AC_SUBST([LIBMONITOR_RUN_DIR])
+AC_SUBST([libmonitor_prefix])
 
+#------------------------------------------------------------
+# Libunwind: --with-libunwind=PATH
+#------------------------------------------------------------
 
-#-------------------------------------------------
-# with-libunwind
-#-------------------------------------------------
+# Now used all platforms.
 
-AC_MSG_CHECKING([whether configured with libunwind])
+# The 32-bit version of libunwind doesn't build correctly on x86-64
+# due to some cross-compile issues, so disable that choice for now.
+# This is only the default, you can reenable with --with-libunwind.
 
-OPT_HAVE_LIBUNWIND=no
-OPT_LIBUNWIND=
-OPT_LIBUNWIND_IFLAGS=
-OPT_LIBUNWIND_LIBPATH=
-OPT_LIBUNWIND_LDFLAGS=
-OPT_LIBUNWIND_LIBSO=
-OPT_LIBUNWIND_LIBA=
-
-if test "$use_externals" = yes ; then
-  OPT_LIBUNWIND="$ext_libunwind_prefix"
-  case "$OPT_LIBUNWIND" in
-    /* ) OPT_HAVE_LIBUNWIND=yes ;;
-  esac
-fi
+default=build
+case "$host_cpu" in
+    *x86*64* )
+	if test "$wordsize" = 32 ; then
+	    default=no
+	fi
+	;;
+esac
 
 AC_ARG_WITH([libunwind],
-  AS_HELP_STRING([--with-libunwind=PATH],
-                 [use given LIBUNWIND installation (absolute path) with hpcrun (default is NO)]),
-  [if test $withval != no; then
-     OPT_HAVE_LIBUNWIND=yes
-     if ( echo "${withval}" | grep -v "^/" >/dev/null 2>&1 ); then
-       AC_MSG_ERROR([--with-libunwind requires absolute path as argument; given '${withval}'])
-     fi
-     OPT_LIBUNWIND=${withval}
-   fi],
-  [])
+    [AS_HELP_STRING([--with-libunwind=PATH],
+	[path to libunwind install directory (default build)])],
+    [],
+    [with_libunwind="$default"])
 
-# Check for LIBUNWIND > .9xxx [skip for now]
+AC_MSG_CHECKING([libunwind])
 
-if test "${OPT_HAVE_LIBUNWIND}" = "yes"; then 
-  AC_MSG_RESULT([yes (${OPT_LIBUNWIND_LIBSO})])
-else
-  AC_MSG_RESULT([no])
+libunwind_avail=no
+libunwind_prefix=no
+libunwind_inc=no
+libunwind_lib=no
+cookie="libunwind/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_libunwind" in
+    build | yes )
+	libunwind_avail=build
+	libunwind_prefix="$libunwind_local_prefix"
+	libunwind_inc="${libunwind_prefix}/include"
+	libunwind_lib="${libunwind_prefix}/lib"
+	;;
+    /* )
+	libunwind_avail="$with_libunwind"
+	libunwind_prefix="$with_libunwind"
+	if test -f "${libunwind_prefix}/include/libunwind.h" ; then
+	    libunwind_inc="${libunwind_prefix}/include"
+	else
+	    AC_MSG_ERROR([invalid libunwind: $libunwind_prefix])
+	fi
+	for lib in $multilib_path fail ; do
+	    if test -f "${libunwind_prefix}/${lib}/libunwind.so" ; then
+		libunwind_lib="${libunwind_prefix}/${lib}"
+		break
+	    fi
+	    if test "$lib" = fail ; then
+		AC_MSG_ERROR([invalid libunwind directory: $with_libunwind])
+	    fi
+	done
+	echo "installed in: $libunwind_avail" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([libunwind directory must be absolute path: $with_libunwind])
+	;;
+esac
+
+AC_MSG_RESULT([$libunwind_avail])
+
+AC_SUBST([libunwind_prefix])
+AC_SUBST([libunwind_inc])
+AC_SUBST([libunwind_lib])
+
+#------------------------------------------------------------
+# Libxml2: --with-libxml2=PATH
+#------------------------------------------------------------
+
+AC_ARG_WITH([libxml2],
+    [AS_HELP_STRING([--with-libxml2=PATH],
+	[path to libxml2 install directory (default build)])],
+    [],
+    [with_libxml2=build])
+
+AC_MSG_CHECKING([libxml2])
+
+libxml2_avail=no
+libxml2_prefix=no
+libxml2_inc=no
+libxml2_lib=no
+cookie="libxml2/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_libxml2" in
+    build | yes )
+	libxml2_avail=build
+	libxml2_prefix="$libxml2_local_prefix"
+	libxml2_inc="${libxml2_prefix}/include/libxml2"
+	libxml2_lib="${libxml2_prefix}/lib"
+	;;
+    /* )
+	libxml2_avail="$with_libxml2"
+	libxml2_prefix="$with_libxml2"
+	if test -d "${with_libxml2}/include/libxml2" ; then
+	    libxml2_inc="${libxml2_prefix}/include/libxml2"
+	else
+	    AC_MSG_ERROR([invalid libxml2 directory: $with_libxml2])
+	fi
+	for lib in $multilib_path fail ; do
+	    if test -f "${libxml2_prefix}/${lib}/libxml2.so" ; then
+		libxml2_lib="${libxml2_prefix}/${lib}"
+		break
+	    fi
+	    if test "$lib" = fail ; then
+		AC_MSG_ERROR([invalid libxml2 directory: $with_libxml2])
+	    fi
+	done
+	echo "installed in: $libxml2_avail" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([libxml2 directory must be absolute path: $with_libxml2])
+	;;
+esac
+
+AC_MSG_RESULT([$libxml2_avail])
+
+AC_SUBST([libxml2_prefix])
+AC_SUBST([libxml2_inc])
+AC_SUBST([libxml2_lib])
+
+#------------------------------------------------------------
+# Old Monitor: --with-old-monitor=PATH
+#------------------------------------------------------------
+
+# Set the default to no on Cray XT, the build fails there, and we
+# don't use it on this platform anyway.
+
+default=build
+if test "x$XTOS_VERSION" != x ; then
+    default=no
 fi
 
-AM_CONDITIONAL(OPT_HAVE_LIBUNWIND, test "${OPT_HAVE_LIBUNWIND}" = "yes")
-AC_SUBST(OPT_LIBUNWIND_IFLAGS)
-AC_SUBST(OPT_LIBUNWIND_LIBPATH)
-AC_SUBST(OPT_LIBUNWIND_LDFLAGS)
-AC_SUBST(OPT_LIBUNWIND_LIBSO)
-AC_SUBST(OPT_LIBUNWIND_LIBA)
+AC_ARG_WITH([old-monitor],
+    [AS_HELP_STRING([--with-old-monitor=PATH],
+	[path to old monitor install directory (default build)])],
+    [],
+    [with_old_monitor=$default])
 
+AC_MSG_CHECKING([old-monitor])
 
-#-------------------------------------------------
-# with-monitor
-#-------------------------------------------------
+old_monitor_avail=no
+old_monitor_prefix=no
+cookie="old-monitor/${nobuild_cookie}"
+rm -f "$cookie"
 
-AC_MSG_CHECKING([for monitor])
+case "$with_old_monitor" in
+    build | yes )
+	old_monitor_avail=build
+	old_monitor_prefix="$old_monitor_local_prefix"
+	;;
+    /* )
+	if test -f "${with_old_monitor}/include/monitor.h" ; then
+	    old_monitor_avail="$with_old_monitor"
+	    old_monitor_prefix="$with_old_monitor"
+	else
+	    AC_MSG_ERROR([invalid old-monitor directory: $with_old_monitor])
+	fi
+	echo "installed in: $with_old_monitor" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([old-monitor directory must be absolute path: $with_old_monitor])
+	;;
+esac
 
-OPT_WITH_MONITOR=no
-OPT_INSTALL_MONITOR=no
-MONITOR=
-MONITOR_LIBS=
-HPC_MONITOR=
+AC_MSG_RESULT([$old_monitor_avail])
 
-if test "$use_externals" = yes ; then
-  MONITOR="$ext_old_monitor_prefix"
-  case "$MONITOR" in
-    /* )  OPT_WITH_MONITOR=yes
-	  OPT_INSTALL_MONITOR=yes
-	  ;;
-  esac
-fi
+AC_SUBST([old_monitor_prefix])
 
-AC_ARG_WITH([monitor],
-  AS_HELP_STRING([--with-monitor=PATH],
-                 [use given (old) libmonitor installation]),
-  [if test $withval != no; then
-     OPT_WITH_MONITOR=yes
-     OPT_INSTALL_MONITOR=yes
-     MONITOR=${withval}
-   else
-     OPT_WITH_MONITOR=no
-   fi],
-  [])
-
-for lib in ${LIB_SEARCH_PATH} ; do
-  if test -r "${MONITOR}/${lib}/libmonitor.so"; then
-    MONITOR_LIBS="${MONITOR_LIBS} ${MONITOR}/${lib}/libmonitor.so"
-  fi
-done
-MONITOR_LIBS=`echo ${MONITOR_LIBS}`
-
-MONITOR_IFLAGS="-I${MONITOR}/include"
-if test "${OPT_INSTALL_MONITOR}" = "yes" ; then
-  HPC_MONITOR="hpctoolkit/monitor"  # lib/...
-else 
-  HPC_MONITOR="${MONITOR}"
-fi
-
-if test "${OPT_WITH_MONITOR}" = "yes" ; then
-  AC_DEFINE([HAVE_MONITOR], [1], [Monitor library])
-  AC_MSG_RESULT([yes (${MONITOR_LIBS})])
-else
-  AC_MSG_RESULT([no (not needed)])
-fi
-
-AC_SUBST([MONITOR])
-AC_SUBST([HPC_MONITOR])
-AC_SUBST([OPT_INSTALL_MONITOR])
-
-
-#-------------------------------------------------
-# Check for Open Analysis (CFG builder, etc.)
-#-------------------------------------------------
-
-AC_MSG_CHECKING([for OpenAnalysis])
-
-OA=no
-if test "$use_externals" = yes ; then
-  OA="$ext_open_analysis_prefix"
-fi
+#------------------------------------------------------------
+# Open Analysis: --with-open-analysis=PATH
+#------------------------------------------------------------
 
 AC_ARG_WITH([open-analysis],
-  AS_HELP_STRING([--with-open-analysis=PATH],
-                 [use given OpenAnalysis installation]),
-  [if test $withval != no; then
-     OA=${withval}
-   fi],
-  [])
+    [AS_HELP_STRING([--with-open-analysis=PATH],
+	[path to open analysis install directory (default build)])],
+    [],
+    [with_open_analysis=build])
 
-OA_IFLAGS="-DOA_IRHANDLETYPE_SZ64 -I${OA}/include"
-OA_LDFLAGS="-L${OA}/lib -lOAsz64"
+AC_MSG_CHECKING([open-analysis])
 
-AC_MSG_RESULT([${OA}])
-AC_SUBST([OA_IFLAGS])
-AC_SUBST([OA_LDFLAGS])
+open_analysis_avail=no
+open_analysis_prefix=no
+cookie="open-analysis/${nobuild_cookie}"
+rm -f "$cookie"
 
+case "$with_open_analysis" in
+    build | yes )
+	open_analysis_avail=build
+	open_analysis_prefix="$open_analysis_local_prefix"
+	;;
+    /* )
+	if test -d "${with_open_analysis}/include/OpenAnalysis" ; then
+	    open_analysis_avail="$with_open_analysis"
+	    open_analysis_prefix="$with_open_analysis"
+	else
+	    AC_MSG_ERROR([invalid open-analysis directory: $with_open_analysis])
+	fi
+	echo "installed in: $with_open_analysis" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([open-analysis directory must be absolute path: $with_open_analysis])
+	;;
+esac
 
-#-------------------------------------------------
-# with-papi
-#-------------------------------------------------
+AC_MSG_RESULT([$open_analysis_avail])
 
-AC_MSG_CHECKING([whether configured with PAPI])
+AC_SUBST([open_analysis_prefix])
 
-#HPC_DEF_CHECK_CXX_PAPI_LINK
-
-OPT_HAVE_PAPI=no
-OPT_PAPI_DYNAMIC=no
-OPT_PAPI_STATIC=no
-OPT_PAPI=
-OPT_PAPI_IFLAGS=
-OPT_PAPI_LDFLAGS=
-OPT_PAPI_LIBPATH=
-
-AC_ARG_WITH([papi],
-  AS_HELP_STRING([--with-papi=PATH],
-                 [use given PAPI installation (absolute path) with hpcrun (default is NO)]),
-  [if test $withval != no; then
-     OPT_HAVE_PAPI=yes
-     if ( echo "${withval}" | grep -v "^/" >/dev/null 2>&1 ); then
-       AC_MSG_ERROR([--with-papi requires absolute path as argument; given '${withval}'])
-     fi
-     OPT_PAPI=${withval}
-   fi],
-  [if test -f /usr/local/papi/include/papi.h; then
-    OPT_HAVE_PAPI=yes
-    OPT_PAPI=/usr/local/papi
-   elif test -f /usr/local/include/papi.h; then
-    OPT_HAVE_PAPI=yes
-    OPT_PAPI=/usr/local
-  fi])
-
-
-# Allow <papi_install_path> to either point to a true installation or
-# simply a build.  In the latter case, the papi library and header
-# will have a different location.
-#   <papi-install-path>/ include/papi.h
-#                        lib/libpapi.so
-#                        lib64/libpapi.so
-#   <papi-build-path>/ papi.h
-#                      libpapi.so
-# Note: same test is in hpctoolkit-oss's Makefile.quick
-#
-if test "$OPT_HAVE_PAPI" = "yes" ; then
-  if test -f "${OPT_PAPI}/include/papi.h"; then
-    OPT_PAPI_IFLAGS="-I${OPT_PAPI}/include"
-  elif test -f "${OPT_PAPI}/papi.h" ; then
-    OPT_PAPI_IFLAGS="-I${OPT_PAPI}"
-  else
-    AC_MSG_ERROR([no papi.h in ${OPT_PAPI}/include])
-  fi
-  
-  for lib in ${LIB_SEARCH_PATH} ; do
-    if test -r "${OPT_PAPI}/${lib}/libpapi.so" \
-       || test -f "${OPT_PAPI}/${lib}/libpapi.a"
-    then
-      OPT_PAPI_LIBPATH="${OPT_PAPI}/${lib}"
-      OPT_PAPI_LDFLAGS="-L${OPT_PAPI_LIBPATH} -lpapi"
-      if test -f "${OPT_PAPI}/${lib}/libpapi.so" ; then
-	OPT_PAPI_DYNAMIC=yes
-      fi
-      if test -f "${OPT_PAPI}/${lib}/libpapi.a" ; then
-	OPT_PAPI_STATIC=yes
-      fi
-      break
-    fi
-  done
-  if test -z "${OPT_PAPI_LIBPATH}" ; then
-    AC_MSG_ERROR([no libpapi.so or libpapi.a in $LIB_SEARCH_PATH])
-  fi
-fi
-
-# Check for PAPI > 3.0 [skip for now]
-
-if test "${OPT_HAVE_PAPI}" = "yes"; then
-  AC_MSG_RESULT([yes (${OPT_PAPI})])
-  AC_MSG_NOTICE([PAPI shared libpapi.so: $OPT_PAPI_DYNAMIC])
-  AC_MSG_NOTICE([PAPI static libpapi.a: $OPT_PAPI_STATIC])
-else
-  AC_MSG_RESULT([no])
-fi
-
-# The dynamic case also needs libpapi.so's prerequisite libraries
-# (-lperfctr, -lpfm).  In the static case, libpapi.a already includes
-# these functions.  At least, that's what we've seen so far.
-#
-papi_extra_libs=
-so_file="${OPT_PAPI_LIBPATH}/libpapi.so"
-if test -f "$so_file" ; then
-  ldd "$so_file" | grep libperfctr >/dev/null 2>&1
-  if test $? = 0 ; then
-    papi_extra_libs="${papi_extra_libs} -lperfctr"
-  fi
-  ldd "$so_file" | grep libpfm >/dev/null 2>&1
-  if test $? = 0 ; then
-    papi_extra_libs="${papi_extra_libs} -lpfm"
-  fi
-fi
-
-AM_CONDITIONAL(OPT_PAPI_DYNAMIC, test "$OPT_PAPI_DYNAMIC" = yes)
-AM_CONDITIONAL(OPT_PAPI_STATIC,  test "$OPT_PAPI_STATIC" = yes)
-
-AC_SUBST(OPT_PAPI)
-AC_SUBST(OPT_PAPI_IFLAGS)
-AC_SUBST(OPT_PAPI_LDFLAGS)
-AC_SUBST(OPT_PAPI_LIBPATH)
-AC_SUBST([papi_extra_libs])
-
-
-#-------------------------------------------------
-# Option: --with-symtabAPI=PATH
-#-------------------------------------------------
-
-SYMTABAPI=no
-if test "$use_externals" = yes ; then
-  SYMTABAPI="$ext_symtabAPI_prefix"
-fi
+#------------------------------------------------------------
+# SymtabAPI: --with-symtabAPI=PATH
+#------------------------------------------------------------
 
 AC_ARG_WITH([symtabAPI],
-  [AS_HELP_STRING([--with-symtabAPI=PATH],
-  	    [path to symtabAPI install directory])],
-  [SYMTABAPI="$withval"],
-  [])
+    [AS_HELP_STRING([--with-symtabAPI=PATH],
+	[path to symtabAPI install directory (default build)])],
+    [],
+    [with_symtabAPI=build])
 
-AC_MSG_CHECKING([for symtabAPI])
+AC_MSG_CHECKING([symtabAPI])
 
-case "${SYMTABAPI}" in
-  /* )
-    if test -f "${SYMTABAPI}/include/Symtab.h" ; then :
-    else
-        AC_MSG_ERROR([invalid symtabAPI directory: $SYMTABAPI])
-    fi
-    SYMTABAPI_COPY=yes
-    SYMTABAPI_RUN_DIR="$hpc_ext_libs_dir"
-    ;;
-  no )
-    SYMTABAPI_COPY=no
-    SYMTABAPI_RUN_DIR=no
-    ;;
-  * )
-    AC_MSG_ERROR([symtabAPI directory must be absolute path: $SYMTABAPI])
-    ;;
+symtabAPI_avail=no
+symtabAPI_prefix=no
+symtabAPI_platform=no
+cookie="symtabAPI/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_symtabAPI" in
+    build | yes )
+	#
+	# SymtabAPI understands a fixed set of platforms, and we only
+	# handle a subset of those.  This is also why you should not
+	# invent non-standard platform names (yuck).
+	#
+	# On x86 and powerpc, choose the platform based on the object
+	# file's wordsize, not the host wordsize.  This allows
+	# building a 32-bit version for a 64-bit host.  On ia64 and
+	# mips, symtabAPI only has a 64-bit version.
+	#
+	case "$host_cpu" in
+	    *i*86* | *x86* )
+		case "$wordsize" in
+		    64 ) symtabAPI_platform=x86_64-unknown-linux2.4 ;;
+		    32 ) symtabAPI_platform=i386-unknown-linux2.4 ;;
+		esac
+		;;
+	    *ia64* )
+		symtabAPI_platform=ia64-unknown-linux2.4
+		;;
+	    *mips64* )
+		symtabAPI_platform=mips64_linux
+		;;
+	    *power* | *ppc* )
+		case "$wordsize" in
+		    64 ) symtabAPI_platform=ppc64_linux ;;
+		    32 ) symtabAPI_platform=ppc32_linux ;;
+		esac
+		;;
+	esac
+	if test "$symtabAPI_platform" != no ; then
+	    symtabAPI_avail=build
+	    symtabAPI_prefix="$symtabAPI_local_prefix"
+	else
+	    echo "not available on this platform" > "$cookie"
+	fi
+	;;
+    /* )
+	if test -f "${with_symtabAPI}/include/Symtab.h" ; then
+	    symtabAPI_avail="$with_symtabAPI"
+	    symtabAPI_prefix="$with_symtabAPI"
+	else
+	    AC_MSG_ERROR([invalid symtabAPI directory: $with_symtabAPI])
+	fi
+	echo "installed in: $symtabAPI_avail" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([symtabAPI directory must be absolute path: $with_symtabAPI])
+	;;
 esac
 
-SYMTABAPI_INC="${SYMTABAPI}/include"
-SYMTABAPI_LIB="${SYMTABAPI}/lib"
+AC_MSG_RESULT([$symtabAPI_avail])
 
-AC_MSG_RESULT([$SYMTABAPI])
+AC_SUBST([symtabAPI_prefix])
+AC_SUBST([symtabAPI_platform])
 
-AC_SUBST([SYMTABAPI_INC])
-AC_SUBST([SYMTABAPI_LIB])
-AC_SUBST([SYMTABAPI_COPY])
-AC_SUBST([SYMTABAPI_RUN_DIR])
+#------------------------------------------------------------
+# XED: --with-xed2=PATH
+#------------------------------------------------------------
 
+# Used on x86 and x86_64.
 
-#-------------------------------------------------
-# Option: --with-xed2=PATH
-#-------------------------------------------------
-
-XED2=no
-if test "$use_externals" = yes ; then
-  XED2="$ext_xed2_prefix"
-fi
+default=no
+case "$host_cpu" in
+    *x86* | *i*86* )
+	default=build
+	;;
+esac
 
 AC_ARG_WITH([xed2],
-  [AS_HELP_STRING([--with-xed2=PATH],
-  	    [path to xed2 install directory])],
-  [XED2="$withval"],
-  [])
+    [AS_HELP_STRING([--with-xed2=PATH],
+	[path to xed2 install directory (default build)])],
+    [],
+    [with_xed2="$default"])
 
-AC_MSG_CHECKING([for xed2])
+AC_MSG_CHECKING([xed2])
 
-case "${XED2}" in
-  /* )
-    if test -f "${XED2}/include/xed-interface.h" ; then :
-    else
-        AC_MSG_ERROR([invalid xed2 directory: $XED2])
-    fi
-    XED2_COPY=yes
-    XED2_RUN_DIR="$hpc_ext_libs_dir"
-    ;;
-  no )
-    XED2_COPY=no
-    XED2_RUN_DIR=no
-    ;;
-  * )
-    AC_MSG_ERROR([xed2 directory must be absolute path: $XED2])
-    ;;
+xed2_avail=no
+xed2_prefix=no
+cookie="xed2/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_xed2" in
+    build | yes )
+	xed2_avail=build
+	xed2_prefix="$xed2_local_prefix"
+	;;
+    /* )
+	if test -f "${with_xed2}/include/xed-interface.h" ; then
+	    xed2_avail="$with_xed2"
+	    xed2_prefix="$with_xed2"
+	else
+	    AC_MSG_ERROR([invalid xed2 directory: $with_xed2])
+	fi
+	echo "installed in: $with_xed2" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([xed2 directory must be absolute path: $with_xed2])
+	;;
 esac
 
-XED2_INC="${XED2}/include"
-XED2_LIB="${XED2}/lib"
+AC_MSG_RESULT([$xed2_avail])
 
-AC_MSG_RESULT([$XED2])
+AC_SUBST([xed2_prefix])
 
-AC_SUBST([XED2_INC])
-AC_SUBST([XED2_LIB])
-AC_SUBST([XED2_COPY])
-AC_SUBST([XED2_RUN_DIR])
-
-
-#-------------------------------------------------
-# Check for Xerces-C (XML parser)
-#-------------------------------------------------
-
-# NOTE: we should allow the locations of xerces, OA, and binutils
-# installations to optionally be given on configure line or in the
-# environment.
-
-AC_MSG_CHECKING([for XercesC])
-
-XERCES=no
-if test "$use_externals" = yes ; then
-  XERCES="$ext_xerces_prefix"
-fi
+#------------------------------------------------------------
+# Xerces: --with-xerces=PATH
+#------------------------------------------------------------
 
 AC_ARG_WITH([xerces],
-  AS_HELP_STRING([--with-xerces=PATH],
-                 [use given XercesC installation]),
-  [if test $withval != no; then
-     XERCES=${withval}
-   fi],
-  [])
-
-XERCES_IFLAGS="-I${XERCES}/include"
-XERCES_LDFLAGS="-L${XERCES}/lib"
-XERCES_LDLIBS="-lxerces-c"
-
-# tallent: should not need -- libtool should handle this
-# xerces (on Linux) uses pthreads
-#case "${host}" in
-#  *-*-linux*)
-#    XERCES_LDFLAGS="${XERCES_LDFLAGS} -lpthread"
-#    ;;
-#esac
-
-
-if test "$XERCES" = no ; then
-  XERCES_COPY=no
-else
-  XERCES_COPY=yes
-  XERCES_LIB="${XERCES}/lib"
-fi
-
-AC_MSG_RESULT([${XERCES}])
-AC_SUBST([XERCES])
-AC_SUBST([XERCES_IFLAGS])
-AC_SUBST([XERCES_LDFLAGS])
-AC_SUBST([XERCES_LDLIBS])
-AC_SUBST([XERCES_COPY])
-AC_SUBST([XERCES_LIB])
-
-
-#----------------------------------------------------------------------------
-# Options
-#----------------------------------------------------------------------------
-
-#-------------------------------------------------
-# enable-hpcrun-flat: Only build hpcrun if on Linux and PAPI is present
-#-------------------------------------------------
-
-AC_MSG_CHECKING([whether to build hpcrun-flat])
-
-OPT_ENABLE_HPCRUN_FLAT="no"
-if test "$OPT_PAPI_DYNAMIC" = yes && test "$OPT_WITH_MONITOR" = yes \
-   && test "${HOST_OS}" = "Linux"
-then
-  OPT_ENABLE_HPCRUN_FLAT="yes"
-fi
-
-AC_MSG_RESULT([${OPT_ENABLE_HPCRUN_FLAT}])
-AM_CONDITIONAL(OPT_ENABLE_HPCRUN_FLAT, test "${OPT_ENABLE_HPCRUN_FLAT}" = "yes")
-
-
-#-------------------------------------------------
-# enable-hpcrun:
-#-------------------------------------------------
-
-AC_ARG_ENABLE([hpcrun],
-  [AS_HELP_STRING([--enable-hpcrun],
-	  [build hpcrun (default yes)])],
-  [],
-  [enable_hpcrun=yes])
-
-AC_MSG_CHECKING([whether to build hpcrun])
-
-OPT_ENABLE_HPCRUN=yes
-enable_hpcrun_mesg=yes
-if test "$enable_hpcrun" = no ; then
-  OPT_ENABLE_HPCRUN=no
-  enable_hpcrun_mesg='no (disabled)'
-elif test "$LIBDWARF" = no   || test "$LIBELF" = no ||  \
-     test "$LIBMONITOR" = no || test "$SYMTABAPI" = no
-then
-  OPT_ENABLE_HPCRUN=no
-  enable_hpcrun_mesg='no (missing prerequisites)'
-fi
-
-# tallent: $hpc_cpu_x86 is never set
-#if test "$hpc_cpu_x86" = yes && test "$XED2" = no ; then
-#  OPT_ENABLE_HPCRUN=no
-#  enable_hpcrun_mesg='no (missing prerequisites)'
-#fi
-
-AC_MSG_RESULT([$enable_hpcrun_mesg])
-AM_CONDITIONAL([OPT_ENABLE_HPCRUN], [test "$OPT_ENABLE_HPCRUN" = yes])
-
-
-
-# Find location of libstdc++.  This is used to set LD_LIBRARY_PATH in
-# hpcfnbounds.
-#
-# FIXME (tallent): This is completely broken for cross-compiling
-# (there is no reason for the paths to be persistent).  Moreover, we
-# should not be responsible for configuring runtime paths for
-# libstdc++.
-#
-# FIXME -- Is there an Autoconf macro for this?
-#
-if test -n "${is_cross_compile}" ; then
-  # For now, assume GCC.  We cannot use the more general test because
-  # 'ldd' cannot execute in cross-compile mode.
-  HPCRUN_LIBCXX_PATH=`${CXX} -print-file-name=libstdc++.so`
-else
-  src="/tmp/hello.$$.cc"
-  obj="/tmp/hello.$$.out"
-  cat <<EOF > "$src"
-main(){}
-EOF
-  ${CXX} -o "$obj" "$src"
-  HPCRUN_LIBCXX_PATH=`ldd $obj | $AWK '/libstdc\+\+/ {print $3}'`
-  rm -f "$src" "$obj"
-fi
-
-HPCRUN_LIBCXX_PATH=`dirname $HPCRUN_LIBCXX_PATH`
-
-AC_SUBST([HPCRUN_LIBCXX_PATH])
-
-
-#-------------------------------------------------
-# enable-hpcrun-static:
-#-------------------------------------------------
-
-# The motivation for this option is that it can be very tricky to
-# build the static profiling code when cross-compiling for a multilib
-# system.
-#
-# The problem is related to the fact that the final libtool target is
-# a .o (rather than a .la) linked together from other .o's.  Libtool
-# correctly creates the individual .o's.  But when the time comes to
-# link the individual .o's together, problems occur.  The link begins
-# promisingly using --mode=link and the cross compiler (e.g. scgcc32).
-# However, libtool then uses the linker (ld) directly.  Unfortunately,
-# the linker doesn't know about cross-compiling multilib magic and
-# uses the default ABI rather than the correct one (e.g., 64 instead
-# of n32).  Even worse, trying to solve the problem using by setting
-# LDFLAGS (e.g. LDFLAGS="-Wl,-m...") appears futile because the flag
-# is not passed to ld when it is called directly.
-
-AC_MSG_CHECKING([whether to build hpcrun for statically linked executables])
-
-OPT_ENABLE_HPCRUN_STATIC="yes"
-
-AC_ARG_ENABLE([hpcrun-static],
-  AS_HELP_STRING([--enable-hpcrun-static],
-	  [build hpcrun for statically linked executables (default yes)]),
-  [case "${enableval}" in
-     yes) OPT_ENABLE_HPCRUN_STATIC="yes" ;;
-     no)  OPT_ENABLE_HPCRUN_STATIC="no" ;;
-     *) AC_MSG_ERROR([bad value ${enableval} for --enable-hpcrun-static]) ;;
-   esac],
-  [OPT_ENABLE_HPCRUN_STATIC=yes])
-
-if test "$OPT_LIBMONITOR_STATIC" = no ; then
-  OPT_ENABLE_HPCRUN_STATIC=no
-fi
-
-AC_MSG_RESULT([${OPT_ENABLE_HPCRUN_STATIC}])
-AM_CONDITIONAL(OPT_ENABLE_HPCRUN_STATIC, test "${OPT_ENABLE_HPCRUN_STATIC}" = "yes")
-
-
-AC_MSG_CHECKING([whether to build hpcrun for dynamically linked executables])
-
-OPT_ENABLE_HPCRUN_DYNAMIC=no
-if test "$OPT_ENABLE_HPCRUN" = yes && test "$OPT_LIBMONITOR_DYNAMIC" = yes ; then
-  OPT_ENABLE_HPCRUN_DYNAMIC=yes
-fi
-
-AC_MSG_RESULT([$OPT_ENABLE_HPCRUN_DYNAMIC])
-
-AM_CONDITIONAL([OPT_ENABLE_HPCRUN_DYNAMIC],
-  [test "$OPT_ENABLE_HPCRUN_DYNAMIC" = yes])
-
-
-#-------------------------------------------------
-# enable-mpi:
-#-------------------------------------------------
-
-AC_MSG_CHECKING([whether to build MPI versions (hpcprof-mpi)])
-
-OPT_REQ_ENABLE_MPI="auto" # yes, no, auto
-
-AC_ARG_ENABLE([mpi],
-  AS_HELP_STRING([--enable-mpi],
-                 [Enable MPI support (uses MPICXX variable)]),
-  [case "${enableval}" in
-     yes) OPT_REQ_ENABLE_MPI="yes" ;;
-     no)  OPT_REQ_ENABLE_MPI="no" ;;
-     *)   AC_MSG_ERROR([bad value ${enableval} for --enable-mpi]) ;;
-   esac],
-  [if test -n "${MPICXX_ORIG}" ; then
-     OPT_REQ_ENABLE_MPI=yes
-   fi])
-
-OPT_ENABLE_MPI=no
-if test -n "${MPICXX}" -a "${OPT_REQ_ENABLE_MPI}" != "no" ; then
-  OPT_ENABLE_MPI=yes
-fi
-
-AC_MSG_RESULT([${OPT_ENABLE_MPI} (request: ${OPT_REQ_ENABLE_MPI})])
-
-
-if test "${OPT_REQ_ENABLE_MPI}" = "yes" -a "${OPT_ENABLE_MPI}" = no ; then
-  AC_MSG_ERROR([MPI support requested but MPI compiler is invalid!])
-fi
-
-AM_CONDITIONAL(OPT_ENABLE_MPI, test "${OPT_ENABLE_MPI}" = "yes")
-
-
-#-------------------------------------------------
-# enable-lush, enable-lush-pthreads, with-cilk
-#-------------------------------------------------
-
-opt_enable_lush=no
-
-AC_ARG_ENABLE([lush],
-  [AS_HELP_STRING([--enable-lush],
-                  [use lush backtrace in hpcrun])],
-  [case "${enableval}" in
-     yes) opt_enable_lush="yes" ;;
-     no)  opt_enable_lush="no" ;;
-     *) AC_MSG_ERROR([bad value ${enableval} for --enable-lush]) ;;
-   esac],
-  [opt_enable_lush=no])
-
-AC_MSG_CHECKING([whether to use lush])
-
-if test "$opt_enable_lush" != yes ; then
-  opt_enable_lush=no
-fi
-
-AC_MSG_RESULT([$opt_enable_lush])
-
-AM_CONDITIONAL([OPT_ENABLE_LUSH], [test "$opt_enable_lush" = yes])
-
-
-
-OPT_WITH_CILK=no
-OPT_CILK_ROOT=
-
-AC_ARG_WITH([cilk],
-  AS_HELP_STRING([--with-cilk=PATH],
-                 [use given (MIT) Cilk installation for LUSH agents]),
-  [if test $withval != no; then
-     OPT_WITH_CILK=yes
-     OPT_CILK_ROOT=${withval}
-   else
-     OPT_WITH_CILK=no
-   fi],
-  [])
-
-
-OPT_CILK_IFLAGS="-I${OPT_CILK_ROOT}/include"
-
-AM_CONDITIONAL([OPT_WITH_CILK], [test "$OPT_WITH_CILK" = yes])
-AC_SUBST([OPT_CILK_IFLAGS])
-
-
-# Note: the --enable-lush-pthreads option may be temporary and may be
-# folded into other options.
-
-AC_ARG_ENABLE([lush-pthreads],
-  [AS_HELP_STRING([--enable-lush-pthreads],
-                  [enable lush pthreads (temp)])],
-  [],
-  [enable_lush_pthreads=no])
-
-if test "$enable_lush_pthreads" = yes && test "$opt_enable_lush" = no ; then
-  AC_MSG_ERROR([enable-lush-pthreads requires enable-lush])
-fi
-
-wrap1='pthread_mutex_lock pthread_mutex_trylock pthread_mutex_unlock'
-wrap2='pthread_spin_lock pthread_spin_trylock pthread_spin_unlock pthread_spin_destroy'
-wrap3='pthread_cond_init pthread_cond_destroy pthread_cond_wait'
-wrap4='pthread_cond_timedwait pthread_cond_signal pthread_cond_broadcast'
-
-hpclink_extra_wrap_names=
-if test "$enable_lush_pthreads" = yes ; then
-  hpclink_extra_wrap_names="$wrap1 $wrap2 $wrap3 $wrap4"
-fi
-
-AC_MSG_NOTICE([lush pthreads: $enable_lush_pthreads])
-AM_CONDITIONAL([OPT_ENABLE_LUSH_PTHREADS], [test "$enable_lush_pthreads" = yes])
-
-AC_SUBST([hpclink_extra_wrap_names])
-
-
-#-------------------------------------------------
-# enable-bluegene: BG/* support
-#-------------------------------------------------
-
-AC_MSG_CHECKING([whether to enable IBM BlueGene/P support])
-
-OPT_ENABLE_IBM_BLUEGENE="no"
-
-AC_ARG_ENABLE([bluegene],
-  AS_HELP_STRING([--enable-bluegene],
-                 [Enable BlueGene/P support]),
-  [case "${enableval}" in
-     yes) OPT_ENABLE_IBM_BLUEGENE="yes" ;;
-     no)  OPT_ENABLE_IBM_BLUEGENE="no" ;;
-     *) AC_MSG_ERROR([bad value ${enableval} for --enable-bluegene]) ;;
-   esac],
-  [if test "$HOST_CPU_PPC" = yes && test -d /bgsys ; then
-     OPT_ENABLE_IBM_BLUEGENE=yes
-   fi])
-
-AC_MSG_RESULT([${OPT_ENABLE_IBM_BLUEGENE}])
-
-if test "${OPT_ENABLE_IBM_BLUEGENE}" = "yes" ; then
-  AC_DEFINE([HOST_SYSTEM_IBM_BLUEGENE], [1], [IBM BlueGene/P support])
-fi
-
-
-#-------------------------------------------------
-# Option: --with-upc=PATH
-#-------------------------------------------------
-
-# The IBM BlueGene UPC sampling source, for which we need header and
-# library files.  On intrepid, these files are in:
-#   inc: /bgsys/drivers/ppcfloor/arch/include/spi
-#   lib: /bgsys/drivers/ppcfloor/runtime/SPI
-#
-# The --with-upc path is just the least common ancestor of these two
-# directories. but we may need to generalize this to --with-upc-inc
-# and --with-upc-lib.
-
-AC_MSG_CHECKING([for UPC])
-
-AC_ARG_WITH([upc],
-  AS_HELP_STRING([--with-upc=PATH],
-      [path to IBM BlueGene UPC installation]),
-  [error_if_missing=yes],
-  [if test "$OPT_ENABLE_IBM_BLUEGENE" = yes ; then
-     with_upc=/bgsys/drivers/ppcfloor
-   else
-     with_upc=no
-   fi
-   error_if_missing=no])
-
-AC_ARG_WITH([upc-lib],
-  AS_HELP_STRING([--with-upc-lib=LIBRARY],
-      [path to UPC library(s), absolute or relative to WITH_UPC/runtime/SPI]),
-  [],
-  [with_upc_lib=libSPI.cna.a])
-
-OPT_UPC=no
-OPT_UPC_IFLAGS=
-OPT_UPC_LDFLAGS=
-opt_upc_mesg=no
-
-case "${with_upc}" in
-  /* )
-    if test -f "${with_upc}/arch/include/spi/UPC.h"
-    then
-      OPT_UPC=yes
-      OPT_UPC_IFLAGS="-I ${with_upc}/arch/include"
-      opt_upc_mesg="$with_upc"
-      for lib in $with_upc_lib ; do
-	case "$lib" in
-	  /* ) abs_lib="$lib" ;;
-	  * )  abs_lib="${with_upc}/runtime/SPI/${lib}" ;;
-	esac
-	if test -f "$abs_lib" ; then
-	  OPT_UPC_LDFLAGS="${OPT_UPC_LDFLAGS} ${abs_lib}"
+    [AS_HELP_STRING([--with-xerces=PATH],
+	[path to xerces/c install directory (default build)])],
+    [],
+    [with_xerces=build])
+
+AC_MSG_CHECKING([xerces])
+
+xerces_avail=no
+xerces_prefix=no
+cookie="xerces/${nobuild_cookie}"
+rm -f "$cookie"
+
+case "$with_xerces" in
+    build | yes )
+	xerces_avail=build
+	xerces_prefix="$xerces_local_prefix"
+	;;
+    /* )
+	if test -f "${with_xerces}/include/xercesc/dom/DOM.hpp" ; then
+	    xerces_avail="$with_xerces"
+	    xerces_prefix="$with_xerces"
 	else
-	  OPT_UPC=no
-	  opt_upc_mesg=no
-	  if test "$error_if_missing" = yes ; then
-	    AC_MSG_ERROR([invalid UPC directory: $with_upc])
-	  fi
+	    AC_MSG_ERROR([invalid xerces directory: $with_xerces])
 	fi
-      done
-    else
-      if test "$error_if_missing" = yes ; then
-	AC_MSG_ERROR([invalid UPC directory: $with_upc])
-      fi
-    fi
-    ;;
-  no )
-    ;;
-  * )
-    AC_MSG_ERROR([UPC directory must be absolute path: $with_upc])
-    ;;
+	echo "installed in: $with_xerces" > "$cookie"
+	;;
+    no )
+	echo "not available" > "$cookie"
+	;;
+    * )
+	AC_MSG_ERROR([xerces directory must be absolute path: $with_xerces])
+	;;
 esac
 
-AC_MSG_RESULT([$opt_upc_mesg])
+AC_MSG_RESULT([$xerces_avail])
 
-AM_CONDITIONAL([OPT_ENABLE_UPC], [test "$OPT_UPC" = yes])
-AC_SUBST(OPT_UPC_IFLAGS)
-AC_SUBST(OPT_UPC_LDFLAGS)
+xerces_platform=linux
 
+AC_SUBST([xerces_prefix])
+AC_SUBST([xerces_platform])
 
-#-------------------------------------------------
-# with-objcopy
-#-------------------------------------------------
+#------------------------------------------------------------
+# MPI: --with-mpi=PATH
+#------------------------------------------------------------
 
-AC_MSG_CHECKING([whether configured with objcopy])
+# Pass the MPI path to old monitor.
 
-OPT_OBJCOPY=objcopy
+AC_ARG_WITH([mpi],
+    [AS_HELP_STRING([--with-mpi=PATH],
+	[pass the MPI path to old monitor,
+	 not used by libmonitor (default no)])],
+    [],
+    [with_mpi=no])
 
-AC_ARG_WITH([objcopy],
-  AS_HELP_STRING([--with-objcopy=<obcopy_path>],
-                 [use given objcopy when hiding hpcrun library symbols]),
-  [if test $withval != no; then
-     OPT_OBJCOPY=${withval}
-   fi],
-  [])
+case "$with_mpi" in
+    /* )
+	if test ! -f "${with_mpi}/include/mpi.h" ; then
+	    AC_MSG_ERROR([invalid mpi directory: $with_mpi])
+	fi
+	;;
+    no )
+	;;
+    * )
+	AC_MSG_ERROR([mpi directory must be absolute path: $with_mpi])
+	;;
+esac
 
-AC_MSG_RESULT([yes (${OPT_OBJCOPY})])
+AC_SUBST([with_mpi])
 
-AC_SUBST(OPT_OBJCOPY)
+#------------------------------------------------------------
+# Summary
+#------------------------------------------------------------
 
+AC_OUTPUT
 
-#-------------------------------------------------
-# enable-hpc-binutils: Enable use of HPCToolkit's binutils 
-#-------------------------------------------------
-
-AC_MSG_CHECKING([whether to enable HPCToolkit GNU binutils functionality])
-
-OPT_ENABLE_HPC_GNUBINUTILS="yes"
-
-AC_ARG_ENABLE([hpc-binutils],
-  AS_HELP_STRING([--enable-hpc-binutils],
-                 [Enable extra HPCToolkit GNU binutils functionality]),
-  [case "${enableval}" in
-     yes) OPT_ENABLE_HPC_GNUBINUTILS="yes" ;;
-     no)  OPT_ENABLE_HPC_GNUBINUTILS="no" ;;
-     *) AC_MSG_ERROR([bad value ${enableval} for --enable-hpc-binutils]) ;;
-   esac],
-  [OPT_ENABLE_HPC_GNUBINUTILS=yes])
-
-AC_MSG_RESULT([${OPT_ENABLE_HPC_GNUBINUTILS}])
-
-if test "${OPT_ENABLE_HPC_GNUBINUTILS}" = "yes" ; then
-  AC_DEFINE([HAVE_HPC_GNUBINUTILS], [1], [HPCToolkit binutils])
+# Copy externs.conf into prefix dir, this must come after AC_OUTPUT.
+if cp -f "$externs_file" "$prefix" ; then : ; else
+    AC_MSG_ERROR([unable to copy $externs_file])
 fi
 
+rm -f "$failure_file"
 
-#-------------------------------------------------
-# enable-devtools: Tools of interest to developers
-#-------------------------------------------------
+AC_MSG_NOTICE([------------------])
+AC_MSG_NOTICE([Externals summary])
+AC_MSG_NOTICE([------------------])
 
-AC_MSG_CHECKING([whether to build developer tools (devtools)])
+if test "$warn_non_gcc" = yes ; then
+    AC_MSG_WARN([Not using the GNU C or C++ compiler.])
+    AC_MSG_WARN([This is not necessarily an error, but some packages may not])
+    AC_MSG_WARN([compile cleanly without gcc or g++.  If the build fails, try])
+    AC_MSG_WARN([using GNU gcc and g++ before reporting an error.])
+    AC_MSG_NOTICE([--------------------------])
+fi
 
-OPT_ENABLE_DEVTOOLS="no"
+if test "$warn_wordsize_mismatch" = yes ; then
+    AC_MSG_WARN([Host wordsize mismatch.])
+    AC_MSG_WARN([Either CC ($wordsize_cc) and CXX ($wordsize_cxx) generate different wordsizes,])
+    AC_MSG_WARN([or they do not match the host wordsize ($wordsize), or they generate])
+    AC_MSG_WARN([different wordsizes with and without CFLAGS.  If you are])
+    AC_MSG_WARN([using a CFLAGS option to reset the wordsize, then put this])
+    AC_MSG_WARN([option in CC with something like CC='gcc -m${wordsize}'.])
+    AC_MSG_NOTICE([--------------------------])
+fi
 
-AC_ARG_ENABLE([devtools],
-  AS_HELP_STRING([--enable-devtools],
-                 [Build development tools (enable debugging)]),
-  [case "${enableval}" in
-     yes) OPT_ENABLE_DEVTOOLS="yes" ;;
-     no)  OPT_ENABLE_DEVTOOLS="no" ;;
-     *) AC_MSG_ERROR([bad value ${enableval} for --enable-devtools]) ;;
-   esac],
-  [OPT_ENABLE_DEVTOOLS=no])
-
-AC_MSG_RESULT([${OPT_ENABLE_DEVTOOLS}])
-AM_CONDITIONAL(OPT_ENABLE_DEVTOOLS, test "${OPT_ENABLE_DEVTOOLS}" = "yes")
-
-
-#----------------------------------------------------------------------------
-# Should we expect statically linked binaries
-#----------------------------------------------------------------------------
-
-
-#HPC_DEF_IS_COMPILER_MAKING_STATIC_BINARIES()
-
-#CXX_MAKES_STATIC_BINARIES="no"
-#if HPC_isCompilerMakingStaticBinaries(${CXX} ${CXXFLAGS} ${HOST_CXXFLAGS}) ; then
-#  CXX_MAKES_STATIC_BINARIES="yes"
-#fi
-
-#AM_CONDITIONAL(CXX_MAKES_STATIC_BINARIES,
-#               test "${CXX_MAKES_STATIC_BINARIES}" = "yes")
-
-
-#MPICXX_MAKES_STATIC_BINARIES="no"
-#if test "${OPT_ENABLE_MPI}" = "yes" && HPC_isCompilerMakingStaticBinaries(${MPICXX} ${CXXFLAGS} ${HOST_CXXFLAGS}) ; then
-#  MPICXX_MAKES_STATIC_BINARIES="yes"
-#fi
-
-#AM_CONDITIONAL(MPICXX_MAKES_STATIC_BINARIES,
-#               test "${MPICXX_MAKES_STATIC_BINARIES}" = "yes")
-
-
-#----------------------------------------------------------------------------
-# Makefiles to create
-#----------------------------------------------------------------------------
-
-AC_CONFIG_HEADERS([src/include/hpctoolkit-config.h])
-
-AC_CONFIG_FILES([ \
-  Makefile \
-  \
-  doc/Makefile \
-  doc/man/Makefile \
-  doc/man/HPCToolkitVersionInfo.tex \
-  doc/manual/Makefile \
-  doc/www/Makefile \
-  \
-  lib/Makefile \
-  \
-  src/Makefile \
-  src/tool/Makefile \
-  src/tool/hpcfnbounds/Makefile \
-  src/tool/hpclump/Makefile \
-  src/tool/hpcprof/Makefile \
-  src/tool/hpcprof-mpi/Makefile \
-  src/tool/hpcprof-flat/Makefile \
-  src/tool/hpcproftt/Makefile \
-  src/tool/hpcrun/Makefile \
-  src/tool/hpcrun-flat/Makefile \
-  src/tool/hpcstruct/Makefile \
-  src/tool/misc/Makefile \
-  src/tool/xprof/Makefile \
-  src/lib/Makefile \
-  src/lib/analysis/Makefile \
-  src/lib/banal/Makefile \
-  src/lib/binutils/Makefile \
-  src/lib/isa/Makefile \
-  src/lib/prof/Makefile \
-  src/lib/profxml/Makefile \
-  src/lib/prof-lean/Makefile \
-  src/lib/stubs-gcc_s/Makefile \
-  src/lib/support/Makefile \
-  src/lib/support-lean/Makefile \
-  src/lib/xml/Makefile \
-])
-
-
-AC_CONFIG_FILES([src/tool/hpcrun/scripts/hpcrun],
-  [chmod +x src/tool/hpcrun/scripts/hpcrun])
-AC_CONFIG_FILES([src/tool/hpcrun/scripts/hpclink],
-  [chmod +x src/tool/hpcrun/scripts/hpclink])
-AC_CONFIG_FILES([src/tool/hpcrun/scripts/hpcsummary],
-  [chmod +x src/tool/hpcrun/scripts/hpcsummary])
-AC_CONFIG_FILES([src/tool/hpcfnbounds/hpcfnbounds],
-  [chmod +x src/tool/hpcfnbounds/hpcfnbounds])
-AC_CONFIG_FILES([src/tool/hpcprof/hpcprof],
-  [chmod +x src/tool/hpcprof/hpcprof])
-AC_CONFIG_FILES([src/tool/hpcprof-mpi/hpcprof-mpi],
-  [chmod +x src/tool/hpcprof-mpi/hpcprof-mpi])
-AC_CONFIG_FILES([src/tool/hpcprof-flat/hpcprof-flat],
-  [chmod +x src/tool/hpcprof-flat/hpcprof-flat])
-AC_CONFIG_FILES([src/tool/hpcproftt/hpcproftt],
-  [chmod +x src/tool/hpcproftt/hpcproftt])
-
-AC_SUBST_FILE([export_hpctoolkit])
-export_hpctoolkit="${srcdir}/config/export-hpctoolkit"
-
-AC_CONFIG_COMMANDS()
-
-AC_OUTPUT()
-
-
-#-------------------------------------------------
-# Summary of the config options.
-#-------------------------------------------------
-
-AC_MSG_NOTICE([-------------------])
-AC_MSG_NOTICE([HPCToolkit summary])
-AC_MSG_NOTICE([-------------------])
-AC_MSG_NOTICE([  HPCToolkit version: ${PACKAGE_VERSION}])
-AC_MSG_NOTICE([  Externals revision: ${externals_mesg}])
-AC_MSG_NOTICE([])
-AC_MSG_NOTICE([  prefix: $prefix])
-AC_MSG_NOTICE([  build:  $build])
-AC_MSG_NOTICE([  host:   $host])
-AC_MSG_NOTICE([])
-AC_MSG_NOTICE([  hpcrun?:      ${enable_hpcrun_mesg}])
-AC_MSG_NOTICE([  hpcrun-flat?: ${OPT_ENABLE_HPCRUN_FLAT}])
-AC_MSG_NOTICE([  mpi support?: ${OPT_ENABLE_MPI}])
-AC_MSG_NOTICE([  hpcrun/lush?: ${opt_enable_lush}])
-AC_MSG_NOTICE([])
-AC_MSG_NOTICE([  CC:        '${CC}'])
-AC_MSG_NOTICE([  CFLAGS:    '${CFLAGS} ${HOST_CFLAGS}'])
-AC_MSG_NOTICE([  CXX:       '${CXX}'])
-AC_MSG_NOTICE([  CXXFLAGS:  '${CXXFLAGS} ${HOST_CXXFLAGS}'])
-AC_MSG_NOTICE([  CCAS:      '${CCAS}'])
-AC_MSG_NOTICE([  CCASFLAGS: '${CCASFLAGS}'])
-AC_MSG_NOTICE([  LDFLAGS:   '${LDFLAGS}'])
-AC_MSG_NOTICE([  MPICXX:    '${MPICXX}'])
-AC_MSG_NOTICE([  HPC_LT_LDFLAGS:        '${HPC_LT_LDFLAGS}'])
-AC_MSG_NOTICE([  HPCPROFMPI_LT_LDFLAGS: '${HPCPROFMPI_LT_LDFLAGS}'])
-AC_MSG_NOTICE([])
-AC_MSG_NOTICE([  binutils:     ${GNUBINUTILS}])
-AC_MSG_NOTICE([  libdwarf:     ${LIBDWARF}])
-AC_MSG_NOTICE([  libelf:       ${LIBELF}])
-AC_MSG_NOTICE([  libmonitor:   ${LIBMONITOR}])
-AC_MSG_NOTICE([  monitor/old:  ${MONITOR}])
-AC_MSG_NOTICE([  libunwind:    ${OPT_LIBUNWIND}])
-AC_MSG_NOTICE([  OpenAnalysis: ${OA}])
-AC_MSG_NOTICE([  symtabAPI:    ${SYMTABAPI}])
-AC_MSG_NOTICE([  xed2:         ${XED2}])
-AC_MSG_NOTICE([  xerces:       ${XERCES}])
-AC_MSG_NOTICE([  papi:         ${OPT_PAPI}])
-AC_MSG_NOTICE([  upc (BG/P):   ${opt_upc_mesg}])
+AC_MSG_NOTICE([svn revision: $svn_revision])
+AC_MSG_NOTICE([prefix: $prefix])
+AC_MSG_NOTICE([build: $build])
+AC_MSG_NOTICE([host:  $host])
+AC_MSG_NOTICE([CC:  '$CC',  CFLAGS:   '$CFLAGS'])
+AC_MSG_NOTICE([CXX: '$CXX',  CXXFLAGS: '$CXXFLAGS'])
+AC_MSG_NOTICE([AR:  '$AR'])
+AC_MSG_NOTICE([wordsize: $wordsize bits])
+AC_MSG_NOTICE([binutils: $binutils_avail])
+AC_MSG_NOTICE([libdwarf: $libdwarf_avail])
+AC_MSG_NOTICE([libelf: $libelf_avail])
+AC_MSG_NOTICE([libmonitor: $libmonitor_avail])
+AC_MSG_NOTICE([libunwind: $libunwind_avail])
+AC_MSG_NOTICE([libxml2: $libxml2_avail])
+AC_MSG_NOTICE([old-monitor: $old_monitor_avail])
+AC_MSG_NOTICE([open-analysis: $open_analysis_avail])
+AC_MSG_NOTICE([symtabAPI: $symtabAPI_avail])
+AC_MSG_NOTICE([xed2: $xed2_avail])
+AC_MSG_NOTICE([xerces: $xerces_avail])
+AC_MSG_NOTICE([mpi: $with_mpi])
 
